@@ -17,53 +17,53 @@ export default function LandingPage() {
     // State Variables
     const [activeTab, setActiveTab] = useState("OptionA");
     const [selectedBlogImage, setSelectedBlogImage] = useState(null);
-    const [blogs, setBlogs] = useState([]); 
+    const [blogs, setBlogs] = useState([]);
     const [blogTitle, setBlogTitle] = useState("");
     const [blogDescription, setBlogDescription] = useState("");
     const [selectedBlog, setSelectedBlog] = useState(null);
     const [isBlogmodalopen, setBlogModalOpen] = useState(false);
-  
+
     // Text Editor
     const editor = useRef(null);
     const placeholder = "Start typing...";
-    
+
     // Function to navigate back
     const handleBack = () => {
-      navigate(-1);
+        navigate(-1);
     };
-  
+
     // Blog Image Upload Handler
     const handleBlogImageChange = (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        setSelectedBlogImage(URL.createObjectURL(file));
-      }
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedBlogImage(URL.createObjectURL(file));
+        }
     };
-  
+
     // Blog Submission Handler
     const handleBlogSubmit = () => {
-      if (!blogTitle || !blogDescription || !selectedBlogImage) {
-        alert("Please fill in all fields!");
-        return;
-      }
-  
-      const newBlog = {
-        title: blogTitle,
-        description: blogDescription,
-        image: selectedBlogImage,
-      };
-  
-      setBlogs([...blogs, newBlog]);
-      setBlogTitle("");
-      setBlogDescription("");
-      setSelectedBlogImage(null);
+        if (!blogTitle || !blogDescription || !selectedBlogImage) {
+            alert("Please fill in all fields!");
+            return;
+        }
+
+        const newBlog = {
+            title: blogTitle,
+            description: blogDescription,
+            image: selectedBlogImage,
+        };
+
+        setBlogs([...blogs, newBlog]);
+        setBlogTitle("");
+        setBlogDescription("");
+        setSelectedBlogImage(null);
     };
-  
+
     // Blog Detail Modal Open
     const handleBlogDetails = (blog) => {
-      setSelectedBlog(blog);
-      setBlogModalOpen(true);
-    };        
+        setSelectedBlog(blog);
+        setBlogModalOpen(true);
+    };
     return (
         <>
             <div className="w-[100%]  font-Poppins md11:w-[100%] md150:w-[100%] h-[100vh] flex flex-col items-center  relative overflow-hidden top-0 bottom-0  px-[30px] py-[30px] ">
@@ -89,91 +89,91 @@ export default function LandingPage() {
                             <div className="   py-[20px] flex flex-col gap-[16px]  px-[20px] overflow-y-auto  md150:h-[70vh] md11:h-[77vh]     h-[67vh]  w-[100%] rounded-[19px] relative   border-[1px]  my-justify-center items-center  border-[#000000]">
                                 <div className="flex flex-col  w-[100%] gap-5">
                                     {/* Blog Section */}
-                                
-            {/* Blog Upload Section */}
-            <div className="pl-[20px] flex w-[98%] gap-[20px]">
-              <div className="py-[20px] flex flex-col gap-[16px] px-[20px] overflow-y-auto h-[67vh] w-[100%] rounded-[19px] border-[1px] border-[#000000]">
-                <div className="flex flex-col w-[100%] gap-5">
-                  <p className="font-semibold text-2xl">Blogs</p>
-                  <div className="flex flex-wrap gap-5">
-                    {/* Blog Upload Section */}
-                    <div className="flex flex-col gap-4 w-[450px]">
-                      <div className="flex gap-4">
-                        {/* Image Upload */}
-                        <div
-                          className="h-[150px] w-[200px] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
-                          onClick={() => document.getElementById("imageInputBlog").click()}
-                        >
-                          {selectedBlogImage ? (
-                            <img src={selectedBlogImage} alt="Selected" className="h-full w-full object-cover rounded-lg" />
-                          ) : (
-                            <i className="text-3xl text-[#005c95] fa-solid fa-plus"></i>
-                          )}
-                          <input
-                            id="imageInputBlog"
-                            type="file"
-                            accept="image/*"
-                            style={{ display: "none" }}
-                            onChange={handleBlogImageChange}
-                          />
-                        </div>
 
-                        {/* Blog Title */}
-                        <div className="w-full flex flex-col">
-                          <input
-                            className="w-full border border-black rounded-lg p-2 text-lg"
-                            type="text"
-                            placeholder="Heading"
-                            value={blogTitle}
-                            onChange={(e) => setBlogTitle(e.target.value)}
-                          />
-                        </div>
-                      </div>
+                                    {/* Blog Upload Section */}
+                                    <div className="pl-[20px] flex w-[98%] gap-[20px]">
+                                        <div className="py-[20px] flex flex-col gap-[16px] px-[20px] overflow-y-auto h-[67vh] w-[100%] rounded-[19px] border-[1px] border-[#000000]">
+                                            <div className="flex flex-col w-[100%] gap-5">
+                                                <p className="font-semibold text-2xl">Blogs</p>
+                                                <div className="flex flex-wrap gap-5">
+                                                    {/* Blog Upload Section */}
+                                                    <div className="flex flex-col gap-4 w-[450px]">
+                                                        <div className="flex gap-4">
+                                                            {/* Image Upload */}
+                                                            <div
+                                                                className="h-[150px] w-[200px] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
+                                                                onClick={() => document.getElementById("imageInputBlog").click()}
+                                                            >
+                                                                {selectedBlogImage ? (
+                                                                    <img src={selectedBlogImage} alt="Selected" className="h-full w-full object-cover rounded-lg" />
+                                                                ) : (
+                                                                    <i className="text-3xl text-[#005c95] fa-solid fa-plus"></i>
+                                                                )}
+                                                                <input
+                                                                    id="imageInputBlog"
+                                                                    type="file"
+                                                                    accept="image/*"
+                                                                    style={{ display: "none" }}
+                                                                    onChange={handleBlogImageChange}
+                                                                />
+                                                            </div>
 
-                      {/* Blog Description Input */}
-                      <textarea
-                        className="w-full border border-black rounded-lg p-2 h-[142px]"
-                        placeholder="Description"
-                        value={blogDescription}
-                        onChange={(e) => setBlogDescription(e.target.value)}
-                      />
+                                                            {/* Blog Title */}
+                                                            <div className="w-full flex flex-col">
+                                                                <input
+                                                                    className="w-full border border-black rounded-lg p-2 text-lg"
+                                                                    type="text"
+                                                                    placeholder="Heading"
+                                                                    value={blogTitle}
+                                                                    onChange={(e) => setBlogTitle(e.target.value)}
+                                                                />
+                                                            </div>
+                                                        </div>
 
-                      {/* Submit Button */}
-                      <button
-                        className="w-full h-[35px] rounded-md bg-[#005f94] text-white font-semibold cursor-pointer"
-                        onClick={handleBlogSubmit}
-                      >
-                        Submit
-                      </button>
-                    </div>
+                                                        {/* Blog Description Input */}
+                                                        <textarea
+                                                            className="w-full border border-black rounded-lg p-2 h-[142px]"
+                                                            placeholder="Description"
+                                                            value={blogDescription}
+                                                            onChange={(e) => setBlogDescription(e.target.value)}
+                                                        />
 
-                    {/* Render Blogs */}
-                    {blogs.map((item, index) => (
-                      <div key={index} className="flex flex-col h-[300px] gap-[10px] border-[#005c95] border-[1.8px] rounded-[10px] p-[10px] w-[470px]">
-                        <div className="flex flex-col w-[100%] gap-[10px]">
-                          <div className="flex w-[100%]">
-                            <div className="h-[150px] w-[150px] border-[#005c95] border-[1.8px] rounded-[8px] flex">
-                              <img src={item.image} alt="" className="w-full h-full object-cover" />
-                            </div>
-                            <div className="flex flex-col w-[290px] gap-[10px] px-[10px]">
-                              <p className="text-[15px] font-[500]">{item.title}</p>
-                              <p className="text-[13px] font-[400]">{item.description}</p>
-                            </div>
-                          </div>
-                          <button
-                            className="w-full h-[35px] rounded-md bg-[#005f94] text-white font-semibold"
-                            onClick={() => handleBlogDetails(item)}
-                          >
-                            View Details
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
- 
+                                                        {/* Submit Button */}
+                                                        <button
+                                                            className="w-full h-[35px] rounded-md bg-[#005f94] text-white font-semibold cursor-pointer"
+                                                            onClick={handleBlogSubmit}
+                                                        >
+                                                            Submit
+                                                        </button>
+                                                    </div>
+
+                                                    {/* Render Blogs */}
+                                                    {blogs.map((item, index) => (
+                                                        <div key={index} className="flex flex-col h-[300px] gap-[10px] border-[#005c95] border-[1.8px] rounded-[10px] p-[10px] w-[470px]">
+                                                            <div className="flex flex-col w-[100%] gap-[10px]">
+                                                                <div className="flex w-[100%]">
+                                                                    <div className="h-[150px] w-[150px] border-[#005c95] border-[1.8px] rounded-[8px] flex">
+                                                                        <img src={item.image} alt="" className="w-full h-full object-cover" />
+                                                                    </div>
+                                                                    <div className="flex flex-col w-[290px] gap-[10px] px-[10px]">
+                                                                        <p className="text-[15px] font-[500]">{item.title}</p>
+                                                                        <p className="text-[13px] font-[400]">{item.description}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <button
+                                                                    className="w-full h-[35px] rounded-md bg-[#005f94] text-white font-semibold"
+                                                                    onClick={() => handleBlogDetails(item)}
+                                                                >
+                                                                    View Details
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 {/* <div className=' flex w-[100%]  border-t-[1.5px] border-dashed border-[#005c95]'>
                                 </div>
@@ -441,9 +441,9 @@ export default function LandingPage() {
                                         </div>
                                     </div>
                                 </div> */}
-                         
 
-                           
+
+
                             </div>
                         </div>
                     </div>
