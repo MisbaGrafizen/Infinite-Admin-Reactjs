@@ -4,59 +4,182 @@ import { useNavigate } from 'react-router-dom';
 import image1 from "../../../public/experts/image1.jpg"
 import image2 from "../../../public/heroSection/rannutsav.jpg"
 import JoditEditor from "jodit-react";
-import {
-    Modal as NextUIModal,
-    ModalBody,
-    ModalContent,
-    useSkeleton,
-} from "@nextui-org/react";
+import CloudinaryUpload from "../../helper/cloudinaryUpload";
+import { ApiGet, ApiPost, ApiPut } from '../../helper/axios';
 
 export default function LandingPage() {
     const navigate = useNavigate();
 
     // State Variables
     const [activeTab, setActiveTab] = useState("OptionA");
+    const [loading, setLoading] = useState(false);
     const [selectedBlogImage, setSelectedBlogImage] = useState(null);
     const [blogs, setBlogs] = useState([]);
     const [blogTitle, setBlogTitle] = useState("");
     const [blogDescription, setBlogDescription] = useState("");
     const [selectedBlog, setSelectedBlog] = useState(null);
+    const [cloudImage, setCloudImage] = useState("");
+    const [error, setError] = useState(null);
     const [isBlogmodalopen, setBlogModalOpen] = useState(false);
+    const [services, setServices] = useState([]);
+    const [selectedService, setSelectedService] = useState(null);
+    const [selectedServiceImage, setSelectedServiceImage] = useState(null);
+    const [serviceTitle, setServiceTitle] = useState("");
+    const [serviceDescription, setServiceDescription] = useState("");
 
-    // Text Editor
-    const editor = useRef(null);
-    const placeholder = "Start typing...";
+    useEffect(() => {
+        const fetchAboutUs = async () => {
+            try {
+                setLoading(true);
+                // const aboutUsResponse = await ApiGet("/admin/about-us");
+                // console.log("About Us Response:", aboutUsResponse);
+
+                // if (aboutUsResponse?.AboutUs?.length > 0) {
+                //     const aboutUsData = aboutUsResponse.AboutUs[0];
+                //     setId(aboutUsData._id || null);
+                //     setTitle(aboutUsData.title || "");
+                //     setContent(aboutUsData.content || "");
+                //     setImage(aboutUsData.image || null);
+
+                //     console.log("State Updated with:", {
+                //         id: aboutUsData._id || null,
+                //         title: aboutUsData.title || "",
+                //         content: aboutUsData.content || "",
+                //         image: aboutUsData.image || null,
+                //     });
+                // }
+
+                const blogsResponse = await ApiGet("/admin/blog");
+                console.log("Blogs API Response:", blogsResponse);
+
+                if (blogsResponse?.blog && Array.isArray(blogsResponse.blog)) {
+                    setBlogs(blogsResponse.blog);
+                } else {
+                    console.error("Unexpected Blogs Response:", blogsResponse);
+                    setError("Failed to load blogs. Unexpected response format.");
+                }
+
+                const serviceResponse = await ApiGet("/admin/service");
+                setServices(
+                    Array.isArray(serviceResponse?.service) ? serviceResponse.service : []
+                );
+
+                // const expertResponse = await ApiGet("/admin/visa-experts");
+                // setExperts(expertResponse.expert || []);
+
+                // const testimonialResponse = await ApiGet("/admin/testimonials");
+                // setTestimonials(testimonialResponse.testimonial || []);
+
+                // const gatewayResponse = await ApiGet("/admin/visa-gateway");
+                // setGateways(gatewayResponse.visaGateway || []);
+
+                // const imageResponse = await ApiGet("/admin/images");
+                // setGallery(imageResponse.image || []);
+
+                // const themeResponse = await ApiGet("/admin/themes");
+                // setThemes(themeResponse.theme || []);
+
+                setLoading(false);
+            } catch (err) {
+                console.error("Error fetching About Us content:", err);
+                setError("Failed to load About Us content.");
+                setLoading(false);
+            }
+        };
+
+        fetchAboutUs();
+    }, []);
 
     // Function to navigate back
     const handleBack = () => {
         navigate(-1);
     };
 
-    // Blog Image Upload Handler
-    const handleBlogImageChange = (event) => {
+    const handleBlogImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
-            setSelectedBlogImage(URL.createObjectURL(file));
+            const cloudImg = await CloudinaryUpload(file);
+            console.log("Uploaded blog image URL:", cloudImg);
+            setCloudImage(cloudImg);
+            const imageUrl = URL.createObjectURL(file);
+            setSelectedBlogImage(imageUrl);
         }
     };
 
-    // Blog Submission Handler
-    const handleBlogSubmit = () => {
-        if (!blogTitle || !blogDescription || !selectedBlogImage) {
-            alert("Please fill in all fields!");
-            return;
+
+    const handleServiceImageChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const cloudImg = await CloudinaryUpload(file);
+            console.log("Uploaded blog image URL:", cloudImg);
+            setCloudImage(cloudImg);
+            const imageUrl = URL.createObjectURL(file);
+            setSelectedServiceImage(imageUrl);
         }
+    };
+    // Blog Submission Handler
+    const handleBlogSubmit = async () => {
+        try {
 
-        const newBlog = {
-            title: blogTitle,
-            description: blogDescription,
-            image: selectedBlogImage,
-        };
+            const payload = {
+                title: blogTitle,
+                description: blogDescription,
+                image: cloudImage || selectedBlogImage,
+            };
+            console.log('payload', payload)
 
-        setBlogs([...blogs, newBlog]);
+            if (selectedBlog) {
+                await ApiPut(`/admin/blog/${selectedBlog._id}`, payload);
+            } else {
+                await ApiPost("/admin/blog", payload);
+            }
+
+            const blogsResponse = await ApiGet("/admin/blog");
+            setBlogs(blogsResponse?.blog || []);
+            resetBlogForm();
+        } catch (err) {
+            console.error("Error submitting blog:", err);
+            setError("Failed to submit blog.");
+        }
+    };
+
+    const handleServiceSubmit = async () => {
+        try {
+
+            const payload = {
+                title: serviceTitle,
+                description: serviceDescription,
+                icon: cloudImage || selectedServiceImage,
+            };
+            console.log('payload', payload)
+
+            if (selectedService) {
+                await ApiPut(`/admin/service/${selectedService._id}`, payload);
+            } else {
+                await ApiPost("/admin/service", payload);
+            }
+
+            const serviceResponse = await ApiGet("/admin/service");
+            setServices(serviceResponse?.service || []);
+            resetServiceForm();
+        } catch (err) {
+            console.error("Error submitting service:", err);
+            setError("Failed to submit service.");
+        }
+    };
+
+    const resetBlogForm = () => {
         setBlogTitle("");
         setBlogDescription("");
         setSelectedBlogImage(null);
+        setSelectedBlog(null);
+    };
+
+    const resetServiceForm = () => {
+        setServiceTitle("");
+        setServiceDescription("");
+        setSelectedServiceImage(null);
+        setSelectedService(null);
     };
 
     // Blog Detail Modal Open
