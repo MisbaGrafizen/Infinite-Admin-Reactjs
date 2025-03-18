@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { image } from "@nextui-org/theme";
-import logo from "../../../public/Header/logo.png";
+import logo from "../../../public/Header/logo.webp";
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -45,7 +45,7 @@ export function Sidebar() {
     { title: "Contact", icon: Users, path: "/contact-us" },
 
     { title: "Landing", icon: FileText, path: "/landing" },
-    // { title: "Hotels", icon: Hotel, path: "/hotel-create" },
+    { title: "About us", icon: Hotel, path: "/aboutus" },
     // { title: "General", icon: Globe, path: "/holidays-option" },
     // { title: "Bookings", icon: Box, path: "" },
 
