@@ -706,60 +706,60 @@ export default function LandingPage() {
     console.log('filteredGateways', filteredGateways)
 
     const handleThemeImageChange = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    try {
-      const uploadedImage = await cloudinaryUpload(file);
-      setThemeImage(uploadedImage);
-    } catch (error) {
-      console.error("Image upload failed:", error);
-    }
-  };
+        const file = event.target.files[0];
+        if (!file) return;
+        try {
+            const uploadedImage = await cloudinaryUpload(file);
+            setThemeImage(uploadedImage);
+        } catch (error) {
+            console.error("Image upload failed:", error);
+        }
+    };
 
-  const handleThemeSubmit = async () => {
-    if (!themeName || !themeImage || !themePackages) {
-      alert("All fields are required.");
-      return;
-    }
+    const handleThemeSubmit = async () => {
+        if (!themeName || !themeImage || !themePackages) {
+            alert("All fields are required.");
+            return;
+        }
 
-    const payload = { name: themeName, image: themeImage, packages: themePackages };
+        const payload = { name: themeName, image: themeImage, packages: themePackages };
 
-    try {
-      if (selectedTheme) {
-        await ApiPut(`/admin/theme/${selectedTheme._id}`, payload);
-      } else {
-        await ApiPost("/admin/theme", payload);
-      }
-      const themeResponse = await ApiGet("/admin/themes");
-      setThemes(themeResponse);
-      resetThemeForm();
-    } catch (error) {
-      console.error("Error submitting theme:", error);
-    }
-  };
+        try {
+            if (selectedTheme) {
+                await ApiPut(`/admin/theme/${selectedTheme._id}`, payload);
+            } else {
+                await ApiPost("/admin/theme", payload);
+            }
+            const themeResponse = await ApiGet("/admin/themes");
+            setThemes(themeResponse);
+            resetThemeForm();
+        } catch (error) {
+            console.error("Error submitting theme:", error);
+        }
+    };
 
-   const handleEditTheme = (theme) => {
-    setThemeName(theme.name);
-    setThemeImage(theme.image);
-    setThemePackages(theme.packages);
-    setSelectedTheme(theme);
-  };
+    const handleEditTheme = (theme) => {
+        setThemeName(theme.name);
+        setThemeImage(theme.image);
+        setThemePackages(theme.packages);
+        setSelectedTheme(theme);
+    };
 
-  const handleDeleteTheme = async (themeId) => {
-    try {
-      await ApiDelete(`/admin/theme/${themeId}`);
-      setThemes((prevThemes) => prevThemes.filter((theme) => theme._id !== themeId));
-    } catch (error) {
-      console.error("Error deleting theme:", error);
-    }
-  };
+    const handleDeleteTheme = async (themeId) => {
+        try {
+            await ApiDelete(`/admin/theme/${themeId}`);
+            setThemes((prevThemes) => prevThemes.filter((theme) => theme._id !== themeId));
+        } catch (error) {
+            console.error("Error deleting theme:", error);
+        }
+    };
 
-  const resetThemeForm = () => {
-    setThemeName("");
-    setThemeImage(null);
-    setThemePackages("");
-    setSelectedTheme(null);
-  };
+    const resetThemeForm = () => {
+        setThemeName("");
+        setThemeImage(null);
+        setThemePackages("");
+        setSelectedTheme(null);
+    };
 
 
 
@@ -894,12 +894,12 @@ export default function LandingPage() {
                                 <div className="flex flex-col  w-[100%] gap-5">
 
                                     <div className="flex flex-col gap-5">
-                                        <p className="font-semibold text-2xl">Faq's</p>
+                                        <p className="font-semibold text-2xl">Hero Slider </p>
 
-                                        <div className="flex  flex-col gap-5">
-                                            <div className=' gap-[10px] flex w-[100%] p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
+                                        <div className="flex  flex-wrap gap-5">
+                                            <div className=' gap-[10px] flex w-fit flex-col p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
                                                 <div
-                                                    className="h-[70px] w-[70px] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
+                                                    className="h-[170px] w-[170px] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
                                                     onClick={() => document.getElementById("imageInputBlFaq").click()}
                                                 >
                                                     {selectedFaqImage ? (
@@ -921,18 +921,101 @@ export default function LandingPage() {
                                                 </div>
 
 
-                                                <div className=' flex flex-col gap-[10px]  w-[95%]'>
+
+
+
+
+
+                                                <button
+                                                    className="w-[100%] h-[35px] rounded-lg bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
+                                                    onClick={handleFaqSubmit}
+                                                >
+                                                    Save
+                                                </button>
+
+
+
+                                            </div>
+                                            <div className=' gap-[10px] flex w-fit flex-col p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
+                                                <div
+                                                    className="h-[170px] w-[170px] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
+                                                    onClick={() => document.getElementById("imageInputBlFaq").click()}
+                                                >
+
+                                                    <img
+                                                        src={image1}
+                                                        alt="Selected"
+                                                        className="h-full w-full object-cover rounded-lg"
+                                                    />
+
+
+                                                </div>
+
+
+
+
+                                                <div className=' flex gap-[10px] justify-end w-[100%]'>
+                                                    <button className='  flex  h-[35px]  w-[70%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'>
+                                                        <i className="fa-regular fa-pen-to-square text-[17px]"></i>
+                                                    </button>
+                                                    <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'>
+                                                        <i className=" fa-solid fa-trash  text-[17px]"></i>
+                                                    </button>
+                                                </div>
+
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className=' flex w-[100%]  border-t-[1.5px] border-dashed border-[#005c95]'>
+                                </div>
+
+
+                                <div className="flex flex-col  w-[100%] gap-5">
+
+                                    <div className="flex flex-col gap-5">
+                                        <p className="font-semibold text-2xl">Founder Vison</p>
+
+                                        <div className="flex  flex-col gap-5">
+                                            <div className=' gap-[10px] flex w-[100%] p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
+                                                <div
+                                                    className="h-[250px] w-[250px] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
+                                                    onClick={() => document.getElementById("imageInputBlFaq").click()}
+                                                >
+                                                    {selectedFaqImage ? (
+                                                        <img
+                                                            src={selectedFaqImage}
+                                                            alt="Selected"
+                                                            className="h-full w-full object-cover rounded-lg"
+                                                        />
+                                                    ) : (
+                                                        <i className="text-3xl text-[#005c95] fa-solid fa-plus"></i>
+                                                    )}
+                                                    <input
+                                                        id="imageInputFaq"
+                                                        type="file"
+                                                        accept="image/*"
+                                                        style={{ display: "none" }}
+                                                        onChange={handleFaqImageChange}
+                                                    />
+                                                </div>
+
+
+                                                <div className=' flex flex-col gap-[10px]  w-[80%]'>
                                                     <input
                                                         className="w-full border outline-none border-[#005c95] rounded-lg p-2 text-[17px]"
                                                         type="text"
-                                                        placeholder="Question"
+                                                        placeholder="Title"
                                                         name="question"
                                                         value={question}
                                                         onChange={(e) => setQuestion(e.target.value)}
                                                     />
-                                                    <textarea className="w-full border outline-none border-[#005c95]  rounded-lg p-2  h-[100px] text-[13px]"
+                                                    <textarea className="w-full border outline-none border-[#005c95]  rounded-lg p-2  h-[150px] text-[13px]"
                                                         type="text"
-                                                        placeholder="Answer"
+                                                        placeholder="Description"
                                                         name="answer"
                                                         value={answer}
                                                         onChange={(e) => setAnswer(e.target.value)}
@@ -950,226 +1033,58 @@ export default function LandingPage() {
 
                                                 </div>
                                             </div>
-                                            {faqs.map((item, index) => (
-                                                <div key={index} className=' gap-[10px] flex w-[100%] p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
-                                                    <div
-                                                        className="h-[70px] w-[70px] border-[#005c95] overflow-hidden border rounded-lg flex items-center justify-center cursor-pointer"
-                                                    >
-                                                        <img className=" flex w-[100%] object-cover   h-[100%]" src={item?.image} />
-                                                    </div>
 
-
-                                                    <div className=' flex flex-col gap-[10px]  w-[95%]'>
-                                                        <h1
-                                                            className="w-full border outline-none border-[#005c95] rounded-lg p-2 text-[17px]"
-
-                                                        >  {item?.question}</h1>
-                                                        <div className="w-full border outline-none border-[#005c95]  rounded-lg p-2  h-[100px] text-[13px]">
-                                                            {item?.answer}
-                                                        </div>
-                                                        <div className=' flex gap-[10px] justify-end w-[100%]'>
-                                                            <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg items-center bg-[#005c95] text-[#fff] justify-center'
-                                                                onClick={() => handleEditFaq(item)}>
-                                                                <i className="fa-regular fa-pen-to-square text-[17px]"></i>
-                                                            </button>
-                                                            <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg items-center bg-[#ff3b31] text-[#fff] justify-center'
-                                                                onClick={() => handleModalOpen(null, item?._id, null, null, null)}>
-                                                                <i className=" fa-solid fa-trash  text-[17px]"></i>
-                                                            </button>
-                                                        </div>
-
-                                                    </div>
+                                            <div className=' gap-[10px] flex w-[100%] p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
+                                                <div
+                                                    className="h-[250px] w-[250px] border-[#005c95] overflow-hidden border rounded-lg flex items-center justify-center cursor-pointer"
+                                                >
+                                                    <img className=" flex w-[100%] object-cover   h-[100%]" src={image1} />
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className=' flex w-[100%]  border-t-[1.5px] border-dashed border-[#005c95]'>
-                                </div>
 
 
-                                <div className="flex flex-col  w-[100%] gap-5">
+                                                <div className=' flex flex-col gap-[10px]  w-[80%]'>
+                                                    <h1
+                                                        className="w-full border outline-none border-[#005c95] rounded-lg p-2  h-[50px] text-[17px]"
 
-                                    <div className="flex flex-col gap-5">
-                                        <p className="font-semibold text-2xl">Quick Visa Getaways</p>
+                                                    >  </h1>
+                                                    <div className="w-full border outline-none border-[#005c95]  rounded-lg p-2  h-[180px] text-[13px]">
 
-                                        <div className="flex flex-col gap-[10px]">
-                                            {/* Buttons for Options */}
-                                            <div className="flex gap-[10px]">
-                                                <button
-                                                    className={`flex w-[130px] h-[37px] text-[15px] rounded-lg items-center justify-center 
-            ${activeTab === "VisaFree" ? "bg-[#005f94] text-white" : "border-[1.2px] border-[#005f94] text-[#005f94]"}`}
-                                                    onClick={() => setActiveTab("VisaFree")}
-                                                >
-                                                    Visa Free
-                                                </button>
+                                                    </div>
+                                                    <div className=' flex gap-[10px] justify-end w-[100%]'>
+                                                        <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg items-center bg-[#005c95] text-[#fff] justify-center'
+                                                        >
+                                                            <i className="fa-regular fa-pen-to-square text-[17px]"></i>
+                                                        </button>
+                                                        <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg items-center bg-[#ff3b31] text-[#fff] justify-center'
+                                                        >
+                                                            <i className=" fa-solid fa-trash  text-[17px]"></i>
+                                                        </button>
+                                                    </div>
 
-                                                <button
-                                                    className={`flex w-[130px] h-[37px] text-[15px] rounded-lg items-center justify-center 
-            ${activeTab === "VisaonArrival" ? "bg-[#005f94] text-white" : "border-[1.2px] border-[#005f94] text-[#005f94]"}`}
-                                                    onClick={() => setActiveTab("VisaonArrival")}
-                                                >
-                                                    Visa on Arrival
-                                                </button>
+                                                </div>
                                             </div>
 
-                                            {/* Conditional Rendering of Sections */}
-                                            {activeTab === "VisaFree" && (
-                                                <>
-                                                    <div className="flex w-[100%] flex-wrap gap-[20px]">
-                                                        {/* Option A Section */}
-                                                        <div className="flex w-[210px] border-[1.2px] rounded-lg border-[#005c95] p-[10px] flex-col gap-[10px]">
-                                                            <div
-                                                                className="h-[170px] w-[100%] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
-                                                                onClick={() => document.getElementById("imageInput").click()}
-                                                            >
-                                                                {selectedImage ? (
-                                                                    <img
-                                                                        src={selectedImage}
-                                                                        alt="Selected"
-                                                                        className="h-full w-full object-cover rounded-lg"
-                                                                    />
-                                                                ) : (
-                                                                    <i className="text-3xl text-[#005c95] fa-solid fa-plus"></i>
-                                                                )}
-                                                                <input
-                                                                    id="imageInput"
-                                                                    type="file"
-                                                                    accept="image/*"
-                                                                    style={{ display: "none" }}
-                                                                    onChange={handleImageChange}
-                                                                />
-                                                            </div>
-
-                                                            <input
-                                                                className="w-full border outline-none border-[#005c95] rounded-lg p-2 text-[16px]"
-                                                                type="text"
-                                                                placeholder="Enter Name"
-                                                                name="name"
-                                                                value={formData.name}
-                                                                onChange={handleInputChange}
-                                                            />
-                                                            <button
-                                                                className="w-full h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
-                                                                onClick={handleSubmit}
-                                                            >
-                                                                Save
-                                                            </button>
-                                                        </div>
-
-                                                        {filteredGateways?.map((gateway) => (
-                                                            <div key={gateway?.id} className="flex w-[210px] border-[1.2px] rounded-lg border-[#005c95] p-[10px] flex-col gap-[10px]">
-                                                                <div className="h-[170px] w-[100%] border-[#005c95] border rounded-lg flex items-center justify-center">
-                                                                    <img
-                                                                        src={gateway?.image}
-                                                                        alt="Selected"
-                                                                        className="h-full w-full object-cover rounded-lg"
-                                                                    />
-                                                                </div>
-                                                                <p className="w-full border outline-none border-[#005c95] rounded-lg p-2 text-[16px]">
-                                                                    {gateway.name}
-                                                                </p>
-                                                                <div className=' flex gap-[10px] justify-end w-[100%]'>
-                                                                    <button className='  flex  h-[40px]  w-[70%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'>
-                                                                        <i className="fa-regular fa-pen-to-square text-[17px]"></i>
-                                                                    </button>
-                                                                    <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'>
-                                                                        <i className=" fa-solid fa-trash  text-[17px]"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </>
-                                            )}
-
-                                            {activeTab === "VisaonArrival" && (
-                                                <>
-                                                    <div className="flex w-[100%] flex-wrap gap-[20px]">
-                                                        {/* Option A Section */}
-                                                        <div className="flex w-[210px] border-[1.2px] rounded-lg border-[#005c95] p-[10px] flex-col gap-[10px]">
-                                                            <div
-                                                                className="h-[170px] w-[100%] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
-                                                                onClick={() => document.getElementById("imageInput").click()}
-                                                            >
-                                                                {selectedImage ? (
-                                                                    <img
-                                                                        src={selectedImage}
-                                                                        alt="Selected"
-                                                                        className="h-full w-full object-cover rounded-lg"
-                                                                    />
-                                                                ) : (
-                                                                    <i className="text-3xl text-[#005c95] fa-solid fa-plus"></i>
-                                                                )}
-                                                                <input
-                                                                    id="imageInput"
-                                                                    type="file"
-                                                                    accept="image/*"
-                                                                    style={{ display: "none" }}
-                                                                    onChange={handleImageChange}
-                                                                />
-                                                            </div>
-
-                                                            <input
-                                                                className="w-full border outline-none border-[#005c95] rounded-lg p-2 text-[16px]"
-                                                                type="text"
-                                                                placeholder="Enter Name"
-                                                                name="name"
-                                                                value={formData.name}
-                                                                onChange={handleInputChange}
-                                                            />
-                                                            <button
-                                                                className="w-full h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
-                                                                onClick={handleSubmit}
-                                                            >
-                                                                Save
-                                                            </button>
-                                                        </div>
-
-                                                        {filteredGateways?.map((gateway) => (
-                                                            <div key={gateway?.id} className="flex w-[210px] border-[1.2px] rounded-lg border-[#005c95] p-[10px] flex-col gap-[10px]">
-                                                                <div className="h-[170px] w-[100%] border-[#005c95] border rounded-lg flex items-center justify-center">
-                                                                    <img
-                                                                        src={gateway?.image}
-                                                                        alt="Selected"
-                                                                        className="h-full w-full object-cover rounded-lg"
-                                                                    />
-                                                                </div>
-                                                                <p className="w-full border outline-none border-[#005c95] rounded-lg p-2 text-[16px]">
-                                                                    {gateway?.name}
-                                                                </p>
-                                                                <div className=' flex gap-[10px] justify-end w-[100%]'>
-                                                                    <button className='  flex  h-[40px]  w-[70%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'>
-                                                                        <i className="fa-regular fa-pen-to-square text-[17px]"></i>
-                                                                    </button>
-                                                                    <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'>
-                                                                        <i className=" fa-solid fa-trash  text-[17px]"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </>
-                                            )}
                                         </div>
                                     </div>
+
+
                                 </div>
                                 <div className=' flex w-[100%]  border-t-[1.5px] border-dashed border-[#005c95]'>
                                 </div>
                                 <div className="flex flex-col  w-[100%] gap-5">
 
                                     <div className="flex  flex-col gap-5">
-                                        <p className="font-semibold text-2xl"> Visa Experts</p>
+                                        <p className="font-semibold text-2xl"> Main Banner</p>
                                         <div className=' flex flex-wrap gap-[20px] w-[100%]'>
 
 
-                                            <div className=' flex  w-[330px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
+                                            <div className=' flex   w-fit gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
 
                                                 <div className=' flex gap-[20px] '>
 
 
                                                     <div
-                                                        className="h-[80px] w-[80px] border-[#005c95] border rounded-full flex items-center justify-center cursor-pointer"
+                                                        className="h-[250px] w-[620px] border-[#005c95] border rounded-lg  flex items-center justify-center cursor-pointer"
                                                         onClick={() => document.getElementById("imageInputExpert").click()}
                                                     >
                                                         {selectedVisaImage ? (
@@ -1189,92 +1104,88 @@ export default function LandingPage() {
                                                             onChange={handleExpertImageChange}
                                                         />
                                                     </div>
-                                                    <div className=' flex-col gap-[7px] flex w-[70%]'>
-                                                        <input
-                                                            className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
-                                                            type="text"
-                                                            placeholder="Enter Name"
-                                                            name="name"
-                                                            value={name}
-                                                            onChange={(e) => setName(e.target.value)}
-                                                        />
-                                                        <input
-                                                            className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
-                                                            type="text"
-                                                            placeholder=" Position"
-                                                            name="description"
-                                                            value={visaDescription}
-                                                            onChange={(e) => setVisaDescription(e.target.value)}
-                                                        />
-                                                        <input
-                                                            className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
-                                                            type="text"
-                                                            placeholder="experience"
-                                                            name="role"
-                                                            value={role}
-                                                            onChange={(e) => setRole(e.target.value)}
-                                                        />
-                                                    </div>
 
-                                                </div>
-                                                <button
-                                                    className="w-full h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
-                                                    onClick={handleVisaExpertSubmit}
-                                                >
-                                                    Save
-                                                </button>
-                                            </div>
-
-                                            {experts?.map((item, index) => (
-                                                <div key={index} className=' flex  w-[330px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
-
-                                                    <div className=' flex gap-[20px] '>
-
-
-                                                        <div
-                                                            className="h-[80px] w-[80px]  overflow-hidden border-[#005c95] border rounded-full flex items-center justify-center cursor-pointer"
-
-                                                        >
-
+                                                    <div
+                                                        className="h-[250px] w-[380px] border-[#005c95] border rounded-lg  flex items-center justify-center cursor-pointer"
+                                                        onClick={() => document.getElementById("imageInputExpert").click()}
+                                                    >
+                                                        {selectedVisaImage ? (
                                                             <img
-                                                                src={item?.image}
+                                                                src={selectedVisaImage}
                                                                 alt="Selected"
                                                                 className="h-full w-full object-cover rounded-lg"
                                                             />
-
-
-                                                        </div>
-                                                        <div className=' flex-col gap-[7px] flex w-[70%]'>
-                                                            <p
-                                                                className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
-
-                                                            > {item?.name}</p>
-
-                                                            <p
-                                                                className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
-
-                                                            > {item?.description}</p>
-                                                            <p
-                                                                className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
-
-                                                            > {item?.role}</p>
-                                                        </div>
-
-                                                    </div>
-                                                    <div className=' flex gap-[10px] justify-end w-[100%]'>
-                                                        <button className='  flex  h-[40px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-                                                            onClick={() => handleEditVisaExpert(item)}
-                                                        >
-                                                            <i className="fa-regular fa-pen-to-square text-[17px]"></i>
-                                                        </button>
-                                                        <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
-                                                            onClick={() => handleModalOpen(null, null, item?._id, null, null)}
-                                                        >
-                                                            <i className=" fa-solid fa-trash  text-[17px]"></i>
-                                                        </button>
+                                                        ) : (
+                                                            <i className="text-3xl text-[#005c95] fa-solid fa-plus"></i>
+                                                        )}
+                                                        <input
+                                                            id="imageInputExpert"
+                                                            type="file"
+                                                            accept="image/*"
+                                                            style={{ display: "none" }}
+                                                            onChange={handleExpertImageChange}
+                                                        />
                                                     </div>
                                                 </div>
-                                            ))}
+                                                <div className=' w-[100%] justify-end flex'>
+
+
+                                                    <button
+                                                        className="w-[120px] h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
+                                                        onClick={handleVisaExpertSubmit}
+                                                    >
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+                                            <div className=' flex   w-fit gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
+
+                                                <div className=' flex gap-[20px] '>
+
+
+                                                    <div
+                                                        className="h-[250px] w-[620px] border-[#005c95] border rounded-lg  flex items-center justify-center cursor-pointer"
+
+                                                    >
+
+                                                        <img
+                                                            src={image2}
+                                                            alt="Selected"
+                                                            className="h-full w-full object-cover rounded-lg"
+                                                        />
+
+                                                    </div>
+
+                                                    <div
+                                                        className="h-[250px] w-[380px] border-[#005c95] border rounded-lg  flex items-center justify-center cursor-pointer"
+
+                                                    >
+
+                                                        <img
+                                                            src={image1}
+                                                            alt="Selected"
+                                                            className="h-full w-full object-cover rounded-lg"
+                                                        />
+
+
+                                                    </div>
+                                                </div>
+                                                <div className=' w-[100%] justify-end gap-[10px] flex'>
+
+                                                    <button className='  flex  h-[40px]  w-[120px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
+                                                    >
+                                                        <i className="fa-regular fa-pen-to-square text-[17px]"></i>
+                                                    </button>
+                                                    <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
+                                                    >
+                                                        <i className=" fa-solid fa-trash  text-[17px]"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -1283,119 +1194,122 @@ export default function LandingPage() {
                                 <div className="flex flex-col  w-[100%] gap-5">
 
                                     <div className="flex  flex-col gap-5">
-                                        <p className="font-semibold text-2xl"> Testimonials</p>
+                                        <p className="font-semibold text-2xl"> Infisquare in Numbers</p>
                                         <div className=' flex flex-wrap gap-[20px] w-[100%]'>
 
 
-                                            <div className=' flex  w-[330px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
-
-                                                <div className=' flex gap-[20px] '>
+                                            <div className=' flex  w-[260px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
 
 
-                                                    <div
-                                                        className="h-[60px] w-[60px] border-[#005c95] border rounded-full flex items-center justify-center cursor-pointer"
-                                                        onClick={() => document.getElementById("imageInputService").click()}
-                                                    >
-                                                        {selectedTestimonialImage ? (
-                                                            <img
-                                                                src={selectedTestimonialImage}
-                                                                alt="Selected"
-                                                                className="h-full w-full object-cover rounded-lg"
-                                                            />
-                                                        ) : (
-                                                            <i className="text-[16px] text-[#005c95] fa-solid fa-plus"></i>
-                                                        )}
-                                                        <input
-                                                            id="imageInputService"
-                                                            type="file"
-                                                            accept="image/*"
-                                                            style={{ display: "none" }}
-                                                            onChange={handleTestimonialImageChange}
+
+
+                                                <div
+                                                    className="h-[160px] w-[100%] rounded-lg border-[#005c95] border flex items-center justify-center cursor-pointer"
+
+                                                >
+                                                    {selectedTestimonialImage ? (
+                                                        <img
+                                                            src={selectedTestimonialImage}
+                                                            alt="Selected"
+                                                            className="h-full w-full object-cover rounded-lg"
                                                         />
-
-                                                    </div>
-                                                    <div className=' flex-col gap-[7px] flex w-[70%]'>
-                                                        <input
-                                                            className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
-                                                            type="text"
-                                                            placeholder="Enter Name"
-                                                            name="name"
-                                                            value={testimonialName}
-                                                            onChange={(e) => setTestimonialName(e.target.value)}
-                                                        />
-                                                        <div className="px-[10px] flex gap-[10px] items-center">
-                                                            {[...Array(5)].map((_, index) => (
-                                                                <i
-                                                                    key={index}
-                                                                    className={`text-[18px] fa-solid fa-star cursor-pointer transition-colors ${index < rating ? "text-[#ead921]" : "text-[#797979]"
-                                                                        }`}
-                                                                    onClick={() => handleStarClick(index)}
-                                                                ></i>
-                                                            ))}
-                                                        </div>
-                                                    </div>
+                                                    ) : (
+                                                        <i className="text-[16px] text-[#005c95] fa-solid fa-plus"></i>
+                                                    )}
+                                                    <input
+                                                        id="imageInputService"
+                                                        type="file"
+                                                        accept="image/*"
+                                                        style={{ display: "none" }}
+                                                        onChange={handleTestimonialImageChange}
+                                                    />
 
                                                 </div>
-                                                <textarea className=' w-full border outline-none h-[80px] border-[#005c95] rounded-lg p-2 text-[14px]'
-                                                    type="text"
-                                                    name="description"
-                                                    value={testimonialDescription}
-                                                    onChange={(e) => setTestimonialDescription(e.target.value)}
-                                                ></textarea>
+                                                <div className=' flex-col gap-[7px] flex w-[100%]'>
+                                                    <input
+                                                        className="w-full border outline-none h-[60px] border-[#005c95] rounded-lg p-2 text-[19px]"
+                                                        type="number"
+                                                        placeholder="Enter Number"
+                                                        name="name"
+
+
+                                                    />
+
+                                                </div>
+                                                <div className=' flex-col gap-[7px] flex w-[100%]'>
+                                                    <input
+                                                        className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
+                                                        type="text"
+                                                        placeholder="Title "
+                                                        name="name"
+
+
+                                                    />
+
+                                                </div>
+
+
+
                                                 <button
                                                     className="w-full h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
                                                     onClick={handleTestimonialSubmit}
                                                 >
                                                     Save
                                                 </button>
+
                                             </div>
-                                            {testimonials?.map((item, index) => (
-                                                <div key={index} className=' flex  w-[330px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
-                                                    <div className=' flex gap-[20px] '>
 
 
-                                                        <div
-                                                            className="h-[60px] w-[60px] overflow-hidden border-[#005c95] border rounded-full flex items-center justify-center cursor-pointer"
 
-                                                        >
+                                            <div className=' flex  w-[260px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
+                                                <div
+                                                    className="h-[160px] w-[100%] rounded-lg border-[#005c95] border flex items-center justify-center cursor-pointer"
 
-                                                            <img
-                                                                src={item?.image}
-                                                                alt="Selected"
-                                                                className="h-full w-full object-cover rounded-lg"
-                                                            />
+                                                >
 
+                                                    <img
+                                                        src={image2}
+                                                        alt="Selected"
+                                                        className="h-full w-full object-cover rounded-lg"
+                                                    />
 
-                                                        </div>
-                                                        <div className=' flex-col gap-[7px] flex w-[70%]'>
-                                                            <div
-                                                                className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
-                                                            >{item?.name} </div>
-                                                            <div className="px-[10px] flex gap-[10px] items-center">
-
-                                                                <i
-
-                                                                    className="text-[18px] fa-solid fa-star cursor-pointer transition-colors text-[#ead921]
-                                                   
-                                                               " >{item?.rating}</i>
-
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                    <div className=' w-full border outline-none h-[80px] border-[#005c95] rounded-lg p-2 text-[14px]'>{item?.description}</div>
-                                                    <div className=' flex gap-[10px] justify-end w-[100%]'>
-                                                        <button className='  flex  h-[40px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-                                                            onClick={() => handleEditTestimonial(item)}>
-                                                            <i className="fa-regular fa-pen-to-square text-[17px]"></i>
-                                                        </button>
-                                                        <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
-                                                            onClick={() => handleModalOpen(null, null, null, item?._id, null)}>
-                                                            <i className=" fa-solid fa-trash  text-[17px]"></i>
-                                                        </button>
-                                                    </div>
                                                 </div>
-                                            ))}
+                                                <div className=' flex-col gap-[7px] flex w-[100%]'>
+                                                    <div
+                                                        className="w-full border  items-center flex outline-none h-[60px] border-[#005c95] rounded-lg p-2 text-[19px]"
+
+
+
+                                                    >
+
+                                                    </div>
+
+                                                </div>
+                                                <div className=' flex-col gap-[7px] flex w-[100%]'>
+                                                    <div
+                                                        className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
+
+
+
+                                                    ></div>
+
+                                                </div>
+
+
+
+                                                <div className=' flex gap-[10px]  w-[100%]'>
+                                                    <button className='  flex  h-[40px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
+                                                    >
+                                                        <i className="fa-regular fa-pen-to-square text-[17px]"></i>
+                                                    </button>
+                                                    <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
+                                                    >
+                                                        <i className=" fa-solid fa-trash  text-[17px]"></i>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -1407,13 +1321,13 @@ export default function LandingPage() {
                                 <div className="flex flex-col  w-[100%] gap-5">
 
                                     <div className="flex  flex-col gap-5">
-                                        <p className="font-semibold text-2xl"> Gallery</p>
+                                        <p className="font-semibold text-2xl"> Product</p>
                                         <div className=' flex flex-wrap gap-[20px] w-[100%]'>
 
 
                                             <div className=' flex  w-[230px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
 
-                                                <div className=' flex gap-[20px] '>
+                                                <div className=' flex flex-col gap-[20px] '>
 
 
                                                     <div
@@ -1438,6 +1352,17 @@ export default function LandingPage() {
                                                         />
 
                                                     </div>
+                                                    <div className=' flex-col gap-[7px] flex w-[100%]'>
+                                                        <input
+                                                            className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[15px]"
+                                                            type="number"
+                                                            placeholder="Enter product"
+                                                            name="name"
+
+
+                                                        />
+
+                                                    </div>
 
 
                                                 </div>
@@ -1450,32 +1375,41 @@ export default function LandingPage() {
                                                 </button>
                                             </div>
 
-                                            {gallery?.map((item, index) => (
-                                                <div key={index} className=' flex  w-[230px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
 
-                                                    <div className=' flex gap-[20px] '>
-                                                        <img
-                                                            className="h-[190px] w-[100%] border-[#005c95] border  rounded-[8px] flex items-center justify-center cursor-pointer"
-                                                            src={item?.image}
+                                            <div className=' flex  w-[230px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
+
+                                                <div className=' flex gap-[20px] '>
+                                                    <img
+                                                        className="h-[190px] w-[100%] border-[#005c95] border  rounded-[8px] flex items-center justify-center cursor-pointer"
+                                                        src={image1}
 
 
-                                                        />
-                                                    </div>
-
-                                                    <div className=' flex gap-[10px] justify-end w-[100%]'>
-                                                        <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-                                                            onClick={() => handleEditGalleryImage(item)}
-                                                        >
-                                                            <i className="fa-regular fa-pen-to-square text-[17px]"></i>
-                                                        </button>
-                                                        <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
-                                                            onClick={() => handleModalOpen(null, null, null, null, item?._id)}
-                                                        >
-                                                            <i className=" fa-solid fa-trash  text-[17px]"></i>
-                                                        </button>
-                                                    </div>
+                                                    />
                                                 </div>
-                                            ))}
+                                                <div className=' flex-col gap-[7px] flex w-[100%]'>
+                                                    <div
+                                                        className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[15px]"
+
+
+
+                                                    >kdnmd</div>
+
+                                                </div>
+
+                                                <div className=' flex gap-[10px] justify-end w-[100%]'>
+                                                    <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
+
+                                                    >
+                                                        <i className="fa-regular fa-pen-to-square text-[17px]"></i>
+                                                    </button>
+                                                    <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
+
+                                                    >
+                                                        <i className=" fa-solid fa-trash  text-[17px]"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -1485,15 +1419,15 @@ export default function LandingPage() {
                                 <div className="flex flex-col  w-[100%] gap-5">
 
                                     <div className="flex  flex-col gap-5">
-                                        <p className="font-semibold text-2xl"> Holidays By Theme</p>
+                                        <p className="font-semibold text-2xl"> Services</p>
                                         <div className=' flex gap-[20px]  flex-wrap'>
-                                            <div className=' flex flex-col gap-[10px] w-[210px] border-[1.2px] p-[10px] border-[#1f5091] rounded-[8px]'>
+                                            <div className=' flex flex-col gap-[10px] w-[290px] border-[1.2px] p-[10px] border-[#1f5091] rounded-[8px]'>
 
 
 
                                                 <div className="flex flex-col justify-center items-center gap-2">
 
-                                                    <div className="relative flex w-[100%] h-[100px] border-[1.2px] justify-center items-center border-[#1f5091] rounded-[8px] overflow-hidden">
+                                                    <div className="relative flex w-[100%] h-[140px] border-[1.2px] justify-center items-center border-[#1f5091] rounded-[8px] overflow-hidden">
                                                         {themeImage ? (
                                                             <img src={themeImage} alt="Selected" className="w-full h-full object-cover" />
                                                         ) : (
@@ -1509,71 +1443,58 @@ export default function LandingPage() {
                                                 </div>
 
                                                 <div className=' flex border-[1.2px] h-[40px] px-[6px] overflow-hidden w-[100%]  border-[#1f5091] rounded-[8px]' >
-                                                    <input placeholder='Tour type' className='   outline-none  text-[15px] flex w-[100%] h-[100%]' type='text' 
-                                                    value={themeName} 
-                                                    onChange={(e) => setThemeName(e.target.value)}
-                                                    />
-                                                </div>
-                                                <div className=' flex gap-[8px] items-center'>
+                                                    <input placeholder='Title' className='   outline-none  text-[15px] flex w-[100%] h-[100%]' type='text'
+                                                        value={themeName}
 
-                                           
-                                                <div className=' flex border-[1.2px] h-[30px] px-[6px] overflow-hidden w-[80px] justify-center items-center  border-[#1f5091] rounded-[8px]' >
-                                                    <input placeholder='00' className='   outline-none  text-[15px] text-center flex w-[100%] h-[100%]' type='number' 
-                                                    value={themePackages} 
-                                                    onChange={(e) => setThemePackages(e.target.value)}
                                                     />
                                                 </div>
-                                                <p className=' text-[12px]'>
-                                              + Tour Packages
-                                                </p>
-                                                </div>
+                                                <textarea className="w-full border outline-none border-[#005c95]  rounded-lg p-2  h-[100px] text-[13px]"
+                                                    type="text"
+                                                    placeholder="Description"
+                                                    name="answer"
+
+                                                >
+
+                                                </textarea>
                                                 <button
                                                     className="w-[100%] h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
-                                                    onClick={handleThemeSubmit}
+                                                    
                                                 >
                                                     Save
                                                 </button>
                                             </div>
-                                            {Array.isArray(themes) && themes.length > 0 ? (
-                                                themes.map((theme, index) => (                                            <div key={index} className=' flex flex-col gap-[10px] w-[210px] border-[1.2px] p-[10px] border-[#1f5091] rounded-[8px]'>
-                                            <div className="flex flex-col justify-center items-center gap-2">
-
-                                                <div className="relative flex w-[100%] h-[100px] border-[1.2px] justify-center items-center border-[#1f5091] rounded-[8px] overflow-hidden">
-                                                
-                                                        <img src={theme?.image} alt="Selected" className="w-full h-full object-cover" />
+                                            <div className=' flex flex-col gap-[10px] w-[290px] border-[1.2px] p-[10px] border-[#1f5091] rounded-[8px]'>
 
 
-                                                </div>
+
+                                                <div className="flex flex-col justify-center items-center gap-2">
+
+                                                    <div className="relative flex w-[100%] h-[140px] border-[1.2px] justify-center items-center border-[#1f5091] rounded-[8px] overflow-hidden">
+                                                    
+                                                            <img src={image2} alt="Selected" className="w-full h-full object-cover" />
+                                                    
+                                                    </div>
                                                 </div>
 
-                                                <div className=' flex border-[1.2px] h-[40px] text-[15px] px-[6px] overflow-hidden items-center w-[100%]  border-[#1f5091] rounded-[8px]' >
-                                                {theme?.name}
+                                                <div className=' flex items-center border-[1.2px] h-[40px] px-[6px] overflow-hidden w-[100%]  border-[#1f5091] rounded-[8px]' >
+                                 jkll
                                                 </div>
-                                                <div className=' flex gap-[8px] items-center'>
+                                                <div className="w-full border outline-none border-[#005c95]  rounded-lg p-2  h-[100px] text-[13px]"
+                                                    type="text"
+                                                    placeholder="Description"
+                                                    name="answer"
 
+                                                >
+                                                bhmnbn
 
-                                                <div className=' flex  h-[30px] px-[6px] overflow-hidden  text-[20px] font-[600] justify-center items-center  text-[#1f5091] rounded-[8px]' >
-                                                {theme?.packages}
                                                 </div>
-                                                <p className=' text-[15px]'>
-                                                + Tour Packages
-                                                </p>
-                                                </div>
-                                                <div className=' flex gap-[10px] justify-end w-[100%]'>
-                                                    <button className='  flex  h-[35px]  w-[70%] gap-[10px] text-[14px] rounded-md     items-center bg-[#005c95] text-[#fff] justify-center'
-                                                    onClick={() => handleEditTheme(theme)}>
-                                                        <i className="fa-regular fa-pen-to-square text-[17px]"></i>
-                                                    </button>
-                                                    <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-md     items-center bg-[#ff3b31] text-[#fff] justify-center'
-                                                    onClick={() => handleDeleteTheme(theme._id)}>
-                                                        <i className=" fa-solid fa-trash  text-[17px]"></i>
-                                                    </button>
-                                                </div>
+                                                <button
+                                                    className="w-[100%] h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
+                                                    
+                                                >
+                                                    Save
+                                                </button>
                                             </div>
-                                        ))
-                                        ) : (
-                                        <p>No themes available.</p>
-                                        )}
                                         </div>
                                     </div>
                                 </div>
