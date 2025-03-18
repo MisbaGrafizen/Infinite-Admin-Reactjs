@@ -72,6 +72,27 @@ export default function LandingPage() {
     const [serviceTitle, setServiceTitle] = useState("");
     const [serviceDescription, setServiceDescription] = useState("");
     const [themePackages, setThemePackages] = useState("");
+    const [products, setProducts] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [productName, setProductName] = useState("");
+    const [productImage, setProductImage] = useState(null);
+    const [selectedHeroImage, setSelectedHeroImage] = useState(null);
+    const [heroImage, setHeroImage] = useState("");
+    const [selectedHero, setSelectedHero] = useState(null);
+    const [calculations, setCalculations] = useState([]);
+    const [selectedCalculation, setSelectedCalculation] = useState(null);
+    const [calculationNumber, setCalculationNumber] = useState("");
+    const [calculationDescription, setCalculationDescription] = useState("");
+    const [selectedCalculationIcon, setSelectedCalculationIcon] = useState(null);
+    const [visions, setVisions] = useState([]);
+    const [selectedVision, setSelectedVision] = useState(null);
+    const [visionName, setVisionName] = useState("");
+    const [visionDescription, setVisionDescription] = useState("");
+    const [selectedVisionImage, setSelectedVisionImage] = useState(null);
+    const [banners, setBanners] = useState([]);
+    const [selectedBanner, setSelectedBanner] = useState(null);
+    const [ bannerImage, setBannerImage] = useState(null);
+
 
     const dispatch = useDispatch();
 
@@ -90,23 +111,23 @@ export default function LandingPage() {
         const fetchAboutUs = async () => {
             try {
                 setLoading(true);
-                const aboutUsResponse = await ApiGet("/admin/about-us");
-                console.log("About Us Response:", aboutUsResponse);
+                // const aboutUsResponse = await ApiGet("/admin/about-us");
+                // console.log("About Us Response:", aboutUsResponse);
 
-                if (aboutUsResponse?.AboutUs?.length > 0) {
-                    const aboutUsData = aboutUsResponse.AboutUs[0];
-                    setId(aboutUsData._id || null);
-                    setTitle(aboutUsData.title || "");
-                    setContent(aboutUsData.content || "");
-                    setImage(aboutUsData.image || null);
+                // if (aboutUsResponse?.AboutUs?.length > 0) {
+                //     const aboutUsData = aboutUsResponse.AboutUs[0];
+                //     setId(aboutUsData._id || null);
+                //     setTitle(aboutUsData.title || "");
+                //     setContent(aboutUsData.content || "");
+                //     setImage(aboutUsData.image || null);
 
-                    console.log("State Updated with:", {
-                        id: aboutUsData._id || null,
-                        title: aboutUsData.title || "",
-                        content: aboutUsData.content || "",
-                        image: aboutUsData.image || null,
-                    });
-                }
+                //     console.log("State Updated with:", {
+                //         id: aboutUsData._id || null,
+                //         title: aboutUsData.title || "",
+                //         content: aboutUsData.content || "",
+                //         image: aboutUsData.image || null,
+                //     });
+                // }
 
                 const blogsResponse = await ApiGet("/admin/blog");
                 console.log("Blogs API Response:", blogsResponse);
@@ -119,24 +140,25 @@ export default function LandingPage() {
                 }
 
                 const serviceResponse = await ApiGet("/admin/service");
+                console.log("serviceResponse", serviceResponse);
                 setServices(
-                    Array.isArray(serviceResponse?.service) ? serviceResponse.service : []
+                    Array.isArray(serviceResponse?.data) ? serviceResponse.data : []
                 );
 
-                const expertResponse = await ApiGet("/admin/visa-experts");
-                setExperts(expertResponse.expert || []);
+                const productResponse = await ApiGet("/admin/categories");
+                setProducts(productResponse.category || []);
 
-                const testimonialResponse = await ApiGet("/admin/testimonials");
-                setTestimonials(testimonialResponse.testimonial || []);
+                const heroSectionResponse = await ApiGet("/admin/hero-section");
+                setHeroImage(heroSectionResponse.heroSection || []);
 
-                const gatewayResponse = await ApiGet("/admin/visa-gateway");
-                setGateways(gatewayResponse.visaGateway || []);
+                const countingResponse = await ApiGet("/admin/calculation");
+                setCalculations(countingResponse.data || []);
 
-                const imageResponse = await ApiGet("/admin/images");
-                setGallery(imageResponse.image || []);
+                const visionResponse = await ApiGet("/admin/section");
+                setVisions(visionResponse.data || []);
 
-                const themeResponse = await ApiGet("/admin/themes");
-                setThemes(themeResponse.theme || []);
+                const themeResponse = await ApiGet("/admin/banner");
+                setBanners(themeResponse.data || []);
 
                 setLoading(false);
             } catch (err) {
@@ -218,15 +240,50 @@ export default function LandingPage() {
         }
     };
 
+    const handleCalculationImageChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const cloudImg = await cloudinaryUpload(file);
+            console.log("Uploaded icon URL:", cloudImg);
+            setCloudImage(cloudImg);
+            const imageUrl = URL.createObjectURL(file);
+            setSelectedCalculationIcon(imageUrl);
+        }
+    };
 
-    const handleGalleryImageChange = async (event) => {
+
+    const handleProductImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
             const cloudImg = await cloudinaryUpload(file);
             console.log("Uploaded blog image URL:", cloudImg);
             setCloudImage(cloudImg);
             const imageUrl = URL.createObjectURL(file);
-            setImage(imageUrl);
+            setProductImage(imageUrl);
+        }
+    };
+
+    const handleVisionImageChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const cloudImg = await cloudinaryUpload(file);
+            console.log("Uploaded blog image URL:", cloudImg);
+            setCloudImage(cloudImg);
+            const imageUrl = URL.createObjectURL(file);
+            setSelectedVisionImage(imageUrl);
+        }
+    };
+
+
+
+    const handleBannerImageChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const cloudImg = await cloudinaryUpload(file);
+            console.log("Uploaded blog image URL:", cloudImg);
+            setCloudImage(cloudImg);
+            const imageUrl = URL.createObjectURL(file);
+            setBannerImage(imageUrl);
         }
     };
 
@@ -234,7 +291,7 @@ export default function LandingPage() {
         const file = event.target.files[0];
         if (file) {
             const cloudImg = await cloudinaryUpload(file);
-            console.log("Uploaded blog image URL:", cloudImg);
+            console.log("Uploaded service image URL:", cloudImg);
             setCloudImage(cloudImg);
             const imageUrl = URL.createObjectURL(file);
             setSelectedTestimonialImage(imageUrl);
@@ -242,14 +299,14 @@ export default function LandingPage() {
     };
 
 
-    const handleFaqImageChange = async (event) => {
+    const handleHeroImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
             const cloudImg = await cloudinaryUpload(file);
-            console.log("Uploaded blog image URL:", cloudImg);
+            console.log("Uploaded image URL:", cloudImg);
             setCloudImage(cloudImg);
             const imageUrl = URL.createObjectURL(file);
-            setSelectedFaqImage(imageUrl);
+            setSelectedHeroImage(imageUrl);
         }
     };
 
@@ -368,7 +425,7 @@ export default function LandingPage() {
             }
 
             const seerviceResponse = await ApiGet("/admin/service");
-            setServices(seerviceResponse?.service || []);
+            setServices(seerviceResponse?.data || []);
             resetServiceForm();
         } catch (err) {
             console.error("Error submitting blog:", err);
@@ -376,24 +433,122 @@ export default function LandingPage() {
         }
     };
 
-    const handleGalleryImageSubmit = async () => {
+    const handleVisionSubmit = async () => {
         try {
 
             const payload = {
-                image: cloudImage || image,
+                title: visionName,
+                description: visionDescription,
+                image: cloudImage || selectedVisionImage,
             };
             console.log('payload', payload)
 
-            if (selectedGalleryImage) {
-                await ApiPut(`/admin/image/${selectedGalleryImage._id}`, payload);
+            if (selectedVision) {
+                await ApiPut(`/admin/section/${selectedVision._id}`, payload);
             } else {
-                await ApiPost("/admin/image", payload);
+                await ApiPost("/admin/section", payload);
             }
 
-            const imageResponse = await ApiGet("/admin/images");
-            setGallery(imageResponse?.image || []);
-            setImage(null);
-            setSelectedGalleryImage(null);
+            const visionResponse = await ApiGet("/admin/section");
+            setVisions(visionResponse?.data || []);
+            resetVisionForm();
+        } catch (err) {
+            console.error("Error submitting blog:", err);
+            setError("Failed to submit blog.");
+        }
+    };
+
+    const handleProductSubmit = async () => {
+        try {
+
+            const payload = {
+                name: productName,
+                image: cloudImage || productImage,
+            };
+            console.log('payload', payload)
+
+            if (selectedProduct) {
+                await ApiPut(`/admin/category/${selectedProduct._id}`, payload);
+            } else {
+                await ApiPost("/admin/category", payload);
+            }
+
+            const productResponse = await ApiGet("/admin/categories");
+            setProducts(productResponse?.category || []);
+            resetProductForm();
+        } catch (err) {
+            console.error("Error submitting product:", err);
+            setError("Failed to submit product.");
+        }
+    };
+
+    const handleHeroImageSubmit = async () => {
+        try {
+
+            const payload = {
+                image: cloudImage || selectedHeroImage,
+            };
+            console.log('payload', payload)
+
+            if (selectedHero) {
+                await ApiPut(`/admin/hero-section/${selectedHero._id}`, payload);
+            } else {
+                await ApiPost("/admin/hero-section", payload);
+            }
+
+            const heroSectionResponse = await ApiGet("/admin/hero-section");
+            setHeroImage(heroSectionResponse?.heroSection || []);
+            resetHeroSectionForm();
+        } catch (err) {
+            console.error("Error submitting blog:", err);
+            setError("Failed to submit blog.");
+        }
+    };
+
+    const handleCountingSubmit = async () => {
+        try {
+
+            const payload = {
+                number: calculationNumber,
+                description: calculationDescription,
+                icon: cloudImage || selectedCalculationIcon,
+            };
+            console.log('payload', payload)
+
+            if (selectedCalculation) {
+                await ApiPut(`/admin/calculation/${selectedCalculation._id}`, payload);
+            } else {
+                await ApiPost("/admin/calculation", payload);
+            }
+
+            const countingResponse = await ApiGet("/admin/calculation");
+            setCalculations(countingResponse?.data || []);
+            resetCalculationForm();
+        } catch (err) {
+            console.error("Error submitting blog:", err);
+            setError("Failed to submit blog.");
+        }
+    };
+
+
+    const handleBannerImageSubmit = async () => {
+        try {
+
+            const payload = {
+                image: cloudImage || bannerImage,
+            };
+            console.log('payload', payload)
+
+            if (selectedBanner) {
+                await ApiPut(`/admin/banner/${selectedBanner._id}`, payload);
+            } else {
+                await ApiPost("/admin/banner", payload);
+            }
+
+            const bannerResponse = await ApiGet("/admin/banner");
+            setBanners(bannerResponse?.image || []);
+            setBanners(null);
+            setSelectedBanner(null);
         } catch (err) {
             console.error("Error submitting blog:", err);
             setError("Failed to submit blog.");
@@ -444,8 +599,8 @@ export default function LandingPage() {
                 await ApiPost("/admin/visa-expert", payload);
             }
 
-            const expertResponse = await ApiGet("/admin/visa-experts");
-            setBlogs(expertResponse?.blog || []);
+            const productResponse = await ApiGet("/admin/visa-experts");
+            setBlogs(productResponse?.blog || []);
             resetVisaExpertForm();
         } catch (err) {
             console.error("Error submitting blog:", err);
@@ -617,6 +772,27 @@ export default function LandingPage() {
     };
 
 
+    const resetCalculationForm = () => {
+        setCalculationDescription("");
+        setCalculationNumber("");
+        setSelectedCalculationIcon(null);
+        setSelectedCalculation(null);
+    };
+
+    const resetVisionForm = () => {
+        setVisionDescription("");
+        setVisionName("");
+        setSelectedVisionImage(null);
+        setSelectedVision(null);
+    };
+
+
+    const resetProductForm = () => {
+        setProductName("");
+        setProductImage(null);
+        setSelectedProduct(null);
+    };
+
     const resetServiceForm = () => {
         setServiceTitle("");
         setServiceDescription("");
@@ -645,6 +821,11 @@ export default function LandingPage() {
         setAnswer("");
         setSelectedFaqImage("");
         setSelectedFaq(null);
+    };
+
+    const resetHeroSectionForm = () => {
+        setSelectedHeroImage("");
+        setSelectedHero(null);
     };
 
     const handleEditBlog = (blog) => {
@@ -786,108 +967,7 @@ export default function LandingPage() {
                         <div className=" pl-[20px] flex md11:w-[98%] md150:w-[97%] md11:gap-[15px]  md150:gap-[20px]">
 
                             <div className="   py-[20px] flex flex-col gap-[16px]  px-[20px] overflow-y-auto  md150:h-[70vh] md11:h-[77vh]     h-[67vh]  w-[100%] rounded-[19px] relative   border-[1px]  my-justify-center items-center  border-[#000000]">
-                                <div className="flex flex-col  w-[100%] gap-5">
-                                    {/* Blog Section */}
-                                    <div className="flex flex-col gap-5">
-                                        <p className="font-semibold text-2xl">Blogs</p>
-
-                                        <div className="flex flex-wrap gap-5">
-                                            {/* Blog Upload Section */}
-                                            <div className="flex flex-col gap-4 w-[450px]">
-                                                <div className="flex gap-4">
-                                                    {/* Image Upload */}
-                                                    <div
-                                                        className="h-[150px] w-[200px] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
-                                                        onClick={() => document.getElementById("imageInputBlog").click()}
-                                                    >
-                                                        {selectedBlogImage ? (
-                                                            <img
-                                                                src={selectedBlogImage}
-                                                                alt="Selected"
-                                                                className="h-full w-full object-cover rounded-lg"
-                                                            />
-                                                        ) : (
-                                                            <i className="text-3xl text-[#005c95] fa-solid fa-plus"></i>
-                                                        )}
-                                                        <input
-                                                            id="imageInputBlog"
-                                                            type="file"
-                                                            accept="image/*"
-                                                            style={{ display: "none" }}
-                                                            onChange={handleBlogImageChange}
-                                                        />
-                                                    </div>
-
-
-                                                    <div className="w-full flex flex-col">
-                                                        <input
-                                                            className="w-full border border-black rounded-lg p-2 text-lg"
-                                                            type="text"
-                                                            placeholder="Heading"
-                                                            name="title"
-                                                            value={blogTitle}
-                                                            onChange={(e) => setBlogTitle(e.target.value)}
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                {/* Blog Description Input */}
-                                                <textarea
-                                                    className="w-full border border-black rounded-lg p-2 h-[142px]"
-                                                    placeholder="Description"
-                                                    name="description"
-                                                    value={blogDescription}
-                                                    onChange={(e) => setBlogDescription(e.target.value)}
-                                                />
-
-                                                {/* Submit Button */}
-                                                <button
-                                                    className="w-full h-[35px] rounded-md bg-[#005f94] text-white font-semibold cursor-pointer active:scale-95 transition-transform duration-150"
-                                                    onClick={handleBlogSubmit}
-                                                >
-                                                    Submit
-                                                </button>
-                                            </div>
-
-                                            {/* Render Blogs */}
-                                            {blogs.map((item, index) => (
-                                                <div
-                                                    key={index} className=" flex flex-col h-[300px] gap-[10px] overflow-hidden relative border-[#005c95] border-[1.8px] rounded-[10px] p-[10px] w-[470px]"
-                                                >
-                                                    <div className=" flex w-[100%]  flex-col gap-[10px]">
-                                                        <div className=" flex   w-[100%]">
-                                                            <div className="h-[150px] w-[150px] overflow-hidden border-[#005c95] border-[1.8px] justify-center items-center rounded-[8px] flex cursor-pointer">
-                                                                <img src={item?.image} alt="" />
-                                                            </div>
-                                                            <div className=" flex gap-[10px] items-center  rounded-bl-[4px]  bg-[#fff] absolute right-0 items-center border-l-[1.6px]  top-[0px] border-b-[1.6px] rounde-b-[10px] border-[#005c95] w-[90px] bg-white h-[30px] justify-center">
-                                                                <i className=" text-[20px] cursor-pointer text-[#005c95]  fa-regular fa-circle-info" onClick={handleBlogDetails} ></i>
-                                                                <i
-                                                                    className="fa-regular text-[15px] cursor-pointer text-[#005c95] fa-pen-to-square"
-                                                                    onClick={() => handleEditBlog(item)}
-
-                                                                ></i>
-                                                                <i
-                                                                    className="text-[15px] cursor-pointer  text-[#ff0b0b] fa-solid fa-trash-can"
-                                                                    onClick={() =>
-                                                                        handleModalOpen(item._id, null, null, null, null)
-                                                                    }
-                                                                ></i>
-                                                            </div>
-                                                            <div className=" w-[290px] flex flex-col gap-[10px]">
-                                                                <div className=" text-[15px] pt-[10px]  leading-[20px] w-[100%] font-[500]  font-Montserrat flex px-[10px]  h-[35px] items-center  rounded-[8px]">
-                                                                    <p>{item?.title}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className=" text-[13px]  font-[400] font-Montserrat  px-[px] flex-wrap flex  h-[200px] ">
-                                                            <p>{item?.description}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
+                            
                                 <div className=' flex w-[100%]  border-t-[1.5px] border-dashed border-[#005c95]'>
                                 </div>
 
@@ -900,11 +980,11 @@ export default function LandingPage() {
                                             <div className=' gap-[10px] flex w-fit flex-col p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
                                                 <div
                                                     className="h-[170px] w-[170px] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
-                                                    onClick={() => document.getElementById("imageInputBlFaq").click()}
+                                                    onClick={() => document.getElementById("imageInputFaq").click()}
                                                 >
-                                                    {selectedFaqImage ? (
+                                                    {selectedHeroImage ? (
                                                         <img
-                                                            src={selectedFaqImage}
+                                                            src={selectedHeroImage}
                                                             alt="Selected"
                                                             className="h-full w-full object-cover rounded-lg"
                                                         />
@@ -916,19 +996,13 @@ export default function LandingPage() {
                                                         type="file"
                                                         accept="image/*"
                                                         style={{ display: "none" }}
-                                                        onChange={handleFaqImageChange}
+                                                        onChange={handleHeroImageChange}
                                                     />
                                                 </div>
 
-
-
-
-
-
-
                                                 <button
                                                     className="w-[100%] h-[35px] rounded-lg bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
-                                                    onClick={handleFaqSubmit}
+                                                    onClick={handleHeroImageSubmit}
                                                 >
                                                     Save
                                                 </button>
@@ -936,22 +1010,20 @@ export default function LandingPage() {
 
 
                                             </div>
-                                            <div className=' gap-[10px] flex w-fit flex-col p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
+                                            {Array.isArray(heroImage) && heroImage.map((item, index) => (
+                                                <div key={index} className=' gap-[10px] flex w-fit flex-col p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
                                                 <div
                                                     className="h-[170px] w-[170px] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
                                                     onClick={() => document.getElementById("imageInputBlFaq").click()}
                                                 >
 
                                                     <img
-                                                        src={image1}
+                                                        src={item?.image}
                                                         alt="Selected"
                                                         className="h-full w-full object-cover rounded-lg"
                                                     />
 
-
                                                 </div>
-
-
 
 
                                                 <div className=' flex gap-[10px] justify-end w-[100%]'>
@@ -962,11 +1034,8 @@ export default function LandingPage() {
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                     </button>
                                                 </div>
-
-
-
-
                                             </div>
+                                        ))}
                                         </div>
                                     </div>
                                 </div>
@@ -983,11 +1052,11 @@ export default function LandingPage() {
                                             <div className=' gap-[10px] flex w-[100%] p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
                                                 <div
                                                     className="h-[250px] w-[250px] border-[#005c95] border rounded-lg flex items-center justify-center cursor-pointer"
-                                                    onClick={() => document.getElementById("imageInputBlFaq").click()}
+                                                    onClick={() => document.getElementById("imageInputVision").click()}
                                                 >
-                                                    {selectedFaqImage ? (
+                                                    {selectedVisionImage ? (
                                                         <img
-                                                            src={selectedFaqImage}
+                                                            src={selectedVisionImage}
                                                             alt="Selected"
                                                             className="h-full w-full object-cover rounded-lg"
                                                         />
@@ -995,11 +1064,11 @@ export default function LandingPage() {
                                                         <i className="text-3xl text-[#005c95] fa-solid fa-plus"></i>
                                                     )}
                                                     <input
-                                                        id="imageInputFaq"
+                                                        id="imageInputVision"
                                                         type="file"
                                                         accept="image/*"
                                                         style={{ display: "none" }}
-                                                        onChange={handleFaqImageChange}
+                                                        onChange={handleVisionImageChange}
                                                     />
                                                 </div>
 
@@ -1009,23 +1078,23 @@ export default function LandingPage() {
                                                         className="w-full border outline-none border-[#005c95] rounded-lg p-2 text-[17px]"
                                                         type="text"
                                                         placeholder="Title"
-                                                        name="question"
-                                                        value={question}
-                                                        onChange={(e) => setQuestion(e.target.value)}
+                                                        name="title"
+                                                        value={visionName}
+                                                        onChange={(e) => setVisionName(e.target.value)}
                                                     />
                                                     <textarea className="w-full border outline-none border-[#005c95]  rounded-lg p-2  h-[150px] text-[13px]"
                                                         type="text"
                                                         placeholder="Description"
-                                                        name="answer"
-                                                        value={answer}
-                                                        onChange={(e) => setAnswer(e.target.value)}
+                                                        name="description"
+                                                        value={visionDescription}
+                                                        onChange={(e) => setVisionDescription(e.target.value)}
                                                     >
 
                                                     </textarea>
                                                     <div className=' flex justify-end w-[100%]'>
                                                         <button
                                                             className="w-[140px] h-[35px] rounded-lg bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
-                                                            onClick={handleFaqSubmit}
+                                                            onClick={handleVisionSubmit}
                                                         >
                                                             Save
                                                         </button>
@@ -1033,12 +1102,12 @@ export default function LandingPage() {
 
                                                 </div>
                                             </div>
-
-                                            <div className=' gap-[10px] flex w-[100%] p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
+                                            {visions?.map((item, index) => (
+                                            <div key={index} className=' gap-[10px] flex w-[100%] p-[10px] border-[#005c95]  rounded-lg border-[1.3px] '>
                                                 <div
                                                     className="h-[250px] w-[250px] border-[#005c95] overflow-hidden border rounded-lg flex items-center justify-center cursor-pointer"
                                                 >
-                                                    <img className=" flex w-[100%] object-cover   h-[100%]" src={image1} />
+                                                    <img className=" flex w-[100%] object-cover   h-[100%]" src={item?.image} />
                                                 </div>
 
 
@@ -1046,9 +1115,9 @@ export default function LandingPage() {
                                                     <h1
                                                         className="w-full border outline-none border-[#005c95] rounded-lg p-2  h-[50px] text-[17px]"
 
-                                                    >  </h1>
+                                                    > {item?.title} </h1>
                                                     <div className="w-full border outline-none border-[#005c95]  rounded-lg p-2  h-[180px] text-[13px]">
-
+                                                    {item?.description}
                                                     </div>
                                                     <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                         <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg items-center bg-[#005c95] text-[#fff] justify-center'
@@ -1063,7 +1132,7 @@ export default function LandingPage() {
 
                                                 </div>
                                             </div>
-
+                                        ))}
                                         </div>
                                     </div>
 
@@ -1087,9 +1156,9 @@ export default function LandingPage() {
                                                         className="h-[250px] w-[620px] border-[#005c95] border rounded-lg  flex items-center justify-center cursor-pointer"
                                                         onClick={() => document.getElementById("imageInputExpert").click()}
                                                     >
-                                                        {selectedVisaImage ? (
+                                                        {bannerImage ? (
                                                             <img
-                                                                src={selectedVisaImage}
+                                                                src={bannerImage}
                                                                 alt="Selected"
                                                                 className="h-full w-full object-cover rounded-lg"
                                                             />
@@ -1101,7 +1170,7 @@ export default function LandingPage() {
                                                             type="file"
                                                             accept="image/*"
                                                             style={{ display: "none" }}
-                                                            onChange={handleExpertImageChange}
+                                                            onChange={handleBannerImageChange}
                                                         />
                                                     </div>
 
@@ -1123,7 +1192,7 @@ export default function LandingPage() {
                                                             type="file"
                                                             accept="image/*"
                                                             style={{ display: "none" }}
-                                                            onChange={handleExpertImageChange}
+                                                            onChange={handleBannerImageChange}
                                                         />
                                                     </div>
                                                 </div>
@@ -1132,33 +1201,29 @@ export default function LandingPage() {
 
                                                     <button
                                                         className="w-[120px] h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
-                                                        onClick={handleVisaExpertSubmit}
+                                                        onClick={handleBannerImageSubmit}
                                                     >
                                                         Save
                                                     </button>
                                                 </div>
                                             </div>
-
-
-                                            <div className=' flex   w-fit gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
+                                            {banners?.map((item, index) => (
+                                            <div key={index} className=' flex   w-fit gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
 
                                                 <div className=' flex gap-[20px] '>
-
-
                                                     <div
                                                         className="h-[250px] w-[620px] border-[#005c95] border rounded-lg  flex items-center justify-center cursor-pointer"
 
-                                                    >
-
+                                                    > 
                                                         <img
-                                                            src={image2}
+                                                            src={item?.image}
                                                             alt="Selected"
                                                             className="h-full w-full object-cover rounded-lg"
                                                         />
 
                                                     </div>
 
-                                                    <div
+                                                    {/* <div
                                                         className="h-[250px] w-[380px] border-[#005c95] border rounded-lg  flex items-center justify-center cursor-pointer"
 
                                                     >
@@ -1170,7 +1235,7 @@ export default function LandingPage() {
                                                         />
 
 
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                                 <div className=' w-[100%] justify-end gap-[10px] flex'>
 
@@ -1184,8 +1249,7 @@ export default function LandingPage() {
                                                     </button>
                                                 </div>
                                             </div>
-
-
+                                        ))}
                                         </div>
                                     </div>
                                 </div>
@@ -1196,20 +1260,14 @@ export default function LandingPage() {
                                     <div className="flex  flex-col gap-5">
                                         <p className="font-semibold text-2xl"> Infisquare in Numbers</p>
                                         <div className=' flex flex-wrap gap-[20px] w-[100%]'>
-
-
                                             <div className=' flex  w-[260px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
-
-
-
-
                                                 <div
                                                     className="h-[160px] w-[100%] rounded-lg border-[#005c95] border flex items-center justify-center cursor-pointer"
-
+                                                    onClick={() => document.getElementById("imageInputService").click()}
                                                 >
-                                                    {selectedTestimonialImage ? (
+                                                    {selectedCalculationIcon ? (
                                                         <img
-                                                            src={selectedTestimonialImage}
+                                                            src={selectedCalculationIcon}
                                                             alt="Selected"
                                                             className="h-full w-full object-cover rounded-lg"
                                                         />
@@ -1221,7 +1279,7 @@ export default function LandingPage() {
                                                         type="file"
                                                         accept="image/*"
                                                         style={{ display: "none" }}
-                                                        onChange={handleTestimonialImageChange}
+                                                        onChange={handleCalculationImageChange}
                                                     />
 
                                                 </div>
@@ -1230,9 +1288,9 @@ export default function LandingPage() {
                                                         className="w-full border outline-none h-[60px] border-[#005c95] rounded-lg p-2 text-[19px]"
                                                         type="number"
                                                         placeholder="Enter Number"
-                                                        name="name"
-
-
+                                                        name="number"
+                                                        value={calculationNumber}
+                                                        onChange={(e) => setCalculationNumber(e.target.value)}
                                                     />
 
                                                 </div>
@@ -1241,34 +1299,30 @@ export default function LandingPage() {
                                                         className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
                                                         type="text"
                                                         placeholder="Title "
-                                                        name="name"
-
-
+                                                        name="description"
+                                                        value={calculationDescription}
+                                                        onChange={(e) => setCalculationDescription(e.target.value)}
                                                     />
 
                                                 </div>
 
-
-
                                                 <button
                                                     className="w-full h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
-                                                    onClick={handleTestimonialSubmit}
+                                                    onClick={handleCountingSubmit}
                                                 >
                                                     Save
                                                 </button>
 
                                             </div>
-
-
-
-                                            <div className=' flex  w-[260px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
+                                            {calculations?.map((item, index) => (
+                                            <div key={index} className=' flex  w-[260px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
                                                 <div
                                                     className="h-[160px] w-[100%] rounded-lg border-[#005c95] border flex items-center justify-center cursor-pointer"
 
                                                 >
 
                                                     <img
-                                                        src={image2}
+                                                        src={item?.icon}
                                                         alt="Selected"
                                                         className="h-full w-full object-cover rounded-lg"
                                                     />
@@ -1278,24 +1332,17 @@ export default function LandingPage() {
                                                     <div
                                                         className="w-full border  items-center flex outline-none h-[60px] border-[#005c95] rounded-lg p-2 text-[19px]"
 
-
-
                                                     >
-
+                                                    {item?.number}
                                                     </div>
 
                                                 </div>
                                                 <div className=' flex-col gap-[7px] flex w-[100%]'>
                                                     <div
                                                         className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[14px]"
-
-
-
-                                                    ></div>
+                                                    >{item?.description}</div>
 
                                                 </div>
-
-
 
                                                 <div className=' flex gap-[10px]  w-[100%]'>
                                                     <button className='  flex  h-[40px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
@@ -1309,7 +1356,7 @@ export default function LandingPage() {
                                                 </div>
 
                                             </div>
-
+                                        ))}
                                         </div>
                                     </div>
                                 </div>
@@ -1334,9 +1381,9 @@ export default function LandingPage() {
                                                         className="h-[190px] w-[100%] border-[#005c95] border  rounded-[8px] flex items-center justify-center cursor-pointer"
                                                         onClick={() => document.getElementById("imageInputGallery").click()}
                                                     >
-                                                        {image ? (
+                                                        {productImage ? (
                                                             <img
-                                                                src={image}
+                                                                src={productImage}
                                                                 alt="Selected"
                                                                 className="h-full w-full object-cover rounded-lg"
                                                             />
@@ -1348,18 +1395,18 @@ export default function LandingPage() {
                                                             type="file"
                                                             accept="image/*"
                                                             style={{ display: "none" }}
-                                                            onChange={handleGalleryImageChange}
+                                                            onChange={handleProductImageChange}
                                                         />
 
                                                     </div>
                                                     <div className=' flex-col gap-[7px] flex w-[100%]'>
                                                         <input
                                                             className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[15px]"
-                                                            type="number"
+                                                            type="text"
                                                             placeholder="Enter product"
                                                             name="name"
-
-
+                                                            value={productName}
+                                                            onChange={(e) => setProductName(e.target.value)}
                                                         />
 
                                                     </div>
@@ -1369,30 +1416,25 @@ export default function LandingPage() {
 
                                                 <button
                                                     className="w-full h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
-                                                    onClick={handleGalleryImageSubmit}
+                                                    onClick={handleProductSubmit}
                                                 >
                                                     Save
                                                 </button>
                                             </div>
 
-
-                                            <div className=' flex  w-[230px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
+                                            {products?.map((item, index) => (
+                                            <div key={index} className=' flex  w-[230px] gap-[9px] p-[10px] rounded-lg flex-col border-[1.2px] border-[#005c95]'>
 
                                                 <div className=' flex gap-[20px] '>
                                                     <img
                                                         className="h-[190px] w-[100%] border-[#005c95] border  rounded-[8px] flex items-center justify-center cursor-pointer"
-                                                        src={image1}
-
-
+                                                        src={item?.image}
                                                     />
                                                 </div>
                                                 <div className=' flex-col gap-[7px] flex w-[100%]'>
                                                     <div
                                                         className="w-full border outline-none h-[40px] border-[#005c95] rounded-lg p-2 text-[15px]"
-
-
-
-                                                    >kdnmd</div>
+                                                    >{item?.name}</div>
 
                                                 </div>
 
@@ -1409,7 +1451,7 @@ export default function LandingPage() {
                                                     </button>
                                                 </div>
                                             </div>
-
+                                         ))}
                                         </div>
                                     </div>
                                 </div>
@@ -1428,8 +1470,8 @@ export default function LandingPage() {
                                                 <div className="flex flex-col justify-center items-center gap-2">
 
                                                     <div className="relative flex w-[100%] h-[140px] border-[1.2px] justify-center items-center border-[#1f5091] rounded-[8px] overflow-hidden">
-                                                        {themeImage ? (
-                                                            <img src={themeImage} alt="Selected" className="w-full h-full object-cover" />
+                                                        {selectedServiceImage ? (
+                                                            <img src={selectedServiceImage} alt="Selected" className="w-full h-full object-cover" />
                                                         ) : (
                                                             <i className="text-[20px] font-[800] text-[#1f5091] fa-solid fa-plus"></i>
                                                         )}
@@ -1437,64 +1479,73 @@ export default function LandingPage() {
                                                             type="file"
                                                             accept="image/*"
                                                             className="absolute inset-0 opacity-0 cursor-pointer"
-                                                            onChange={handleThemeImageChange}
+                                                            onChange={handleServiceImageChange}
                                                         />
                                                     </div>
                                                 </div>
 
                                                 <div className=' flex border-[1.2px] h-[40px] px-[6px] overflow-hidden w-[100%]  border-[#1f5091] rounded-[8px]' >
-                                                    <input placeholder='Title' className='   outline-none  text-[15px] flex w-[100%] h-[100%]' type='text'
-                                                        value={themeName}
-
+                                                    <input placeholder='Title' className='   outline-none  text-[15px] flex w-[100%] h-[100%]'
+                                                    type='text'
+                                                    name="title"
+                                                    value={serviceTitle}
+                                                    onChange={(e) => setServiceTitle(e.target.value)}
                                                     />
                                                 </div>
                                                 <textarea className="w-full border outline-none border-[#005c95]  rounded-lg p-2  h-[100px] text-[13px]"
                                                     type="text"
                                                     placeholder="Description"
-                                                    name="answer"
-
+                                                    name="description"
+                                                    value={serviceDescription}
+                                                    onChange={(e) => setServiceDescription(e.target.value)}
                                                 >
 
                                                 </textarea>
                                                 <button
                                                     className="w-[100%] h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
-                                                    
+                                                    onClick={handleServiceSubmit}
                                                 >
                                                     Save
                                                 </button>
                                             </div>
-                                            <div className=' flex flex-col gap-[10px] w-[290px] border-[1.2px] p-[10px] border-[#1f5091] rounded-[8px]'>
-
-
+                                            {services?.map((service, index) => (
+                                            <div key={index} className=' flex flex-col gap-[10px] w-[290px] border-[1.2px] p-[10px] border-[#1f5091] rounded-[8px]'>
 
                                                 <div className="flex flex-col justify-center items-center gap-2">
 
                                                     <div className="relative flex w-[100%] h-[140px] border-[1.2px] justify-center items-center border-[#1f5091] rounded-[8px] overflow-hidden">
                                                     
-                                                            <img src={image2} alt="Selected" className="w-full h-full object-cover" />
+                                                            <img src={service?.icon} alt="Selected" className="w-[100px] h-[100px] " />
                                                     
                                                     </div>
                                                 </div>
 
                                                 <div className=' flex items-center border-[1.2px] h-[40px] px-[6px] overflow-hidden w-[100%]  border-[#1f5091] rounded-[8px]' >
-                                 jkll
+                                                {service?.title}
                                                 </div>
-                                                <div className="w-full border outline-none border-[#005c95]  rounded-lg p-2  h-[100px] text-[13px]"
+                                                <div className="w-full border outline-none overflow-y-auto border-[#005c95]  rounded-lg p-2  h-[100px] text-[13px]"
                                                     type="text"
                                                     placeholder="Description"
                                                     name="answer"
 
                                                 >
-                                                bhmnbn
-
+                                                {service?.description}
                                                 </div>
-                                                <button
-                                                    className="w-[100%] h-[35px] rounded-md bg-[#005f94] text-white font-[500] cursor-pointer active:scale-95 transition-transform duration-150"
-                                                    
-                                                >
-                                                    Save
-                                                </button>
+                                                <div className=' flex gap-[10px] justify-end w-[100%]'>
+                                                    <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
+
+                                                    >
+                                                        <i className="fa-regular fa-pen-to-square text-[17px]"></i>
+                                                    </button>
+                                                    <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
+
+                                                    >
+                                                        <i className=" fa-solid fa-trash  text-[17px]"></i>
+                                                    </button>
+                                                </div>
+                                            
                                             </div>
+                                        ))}
                                         </div>
                                     </div>
                                 </div>
