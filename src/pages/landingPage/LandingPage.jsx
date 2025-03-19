@@ -23,14 +23,8 @@ export default function LandingPage() {
     const [content, setContent] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [selectedBlogImage, setSelectedBlogImage] = useState(null);
-    const [blogs, setBlogs] = useState([]);
-    const [blogTitle, setBlogTitle] = useState("");
-    const [blogDescription, setBlogDescription] = useState("");
-    const [selectedBlog, setSelectedBlog] = useState(null);
     const [selectedFaq, setSelectedFaq] = useState(null);
     const [rating, setRating] = useState(0);
-    const [blogIdToDelete, setBlogIdToDelete] = useState(null);
     const [cloudImage, setCloudImage] = useState("");
     const [blogContent, setBlogContent] = useState("");
     const [question, setQuestion] = useState("");
@@ -128,17 +122,6 @@ export default function LandingPage() {
                 //         image: aboutUsData.image || null,
                 //     });
                 // }
-
-                const blogsResponse = await ApiGet("/admin/blog");
-                console.log("Blogs API Response:", blogsResponse);
-
-                if (blogsResponse?.blog && Array.isArray(blogsResponse.blog)) {
-                    setBlogs(blogsResponse.blog);
-                } else {
-                    console.error("Unexpected Blogs Response:", blogsResponse);
-                    setError("Failed to load blogs. Unexpected response format.");
-                }
-
                 const serviceResponse = await ApiGet("/admin/service");
                 console.log("serviceResponse", serviceResponse);
                 setServices(
@@ -171,7 +154,6 @@ export default function LandingPage() {
         fetchAboutUs();
     }, []);
 
-    console.log('blogs', blogs)
 
 
     const handleInputChange = (e) => {
@@ -227,17 +209,6 @@ export default function LandingPage() {
 
     const handleBack = () => {
         navigate(-1);
-    };
-
-    const handleBlogImageChange = async (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const cloudImg = await cloudinaryUpload(file);
-            console.log("Uploaded blog image URL:", cloudImg);
-            setCloudImage(cloudImg);
-            const imageUrl = URL.createObjectURL(file);
-            setSelectedBlogImage(imageUrl);
-        }
     };
 
     const handleCalculationImageChange = async (event) => {
@@ -373,40 +344,6 @@ export default function LandingPage() {
         setModalOpen(false);
     };
 
-
-
-
-    const handleBlogSubmit = async () => {
-        try {
-
-            const payload = {
-                title: blogTitle,
-                description: blogDescription,
-                image: cloudImage || selectedBlogImage,
-            };
-            console.log('payload', payload)
-
-            if (selectedBlog) {
-                await ApiPut(`/admin/blog/${selectedBlog._id}`, payload);
-            } else {
-                // if (!blogTitle || !blogDescription || !cloudImage) {
-                //     alert(
-                //         "All fields are required. Please fill in all fields before submitting."
-                //     );
-                //     return;
-                // }
-
-                await ApiPost("/admin/blog", payload);
-            }
-
-            const blogsResponse = await ApiGet("/admin/blog");
-            setBlogs(blogsResponse?.blog || []);
-            resetBlogForm();
-        } catch (err) {
-            console.error("Error submitting blog:", err);
-            setError("Failed to submit blog.");
-        }
-    };
 
     const handleServiceSubmit = async () => {
         try {
@@ -574,7 +511,7 @@ export default function LandingPage() {
             }
 
             const testimonialResponse = await ApiGet("/admin/testimonials");
-            setBlogs(testimonialResponse?.testimonial || []);
+            setTestimonials(testimonialResponse?.testimonial || []);
             resetTestimonialForm();
         } catch (err) {
             console.error("Error submitting blog:", err);
@@ -600,7 +537,7 @@ export default function LandingPage() {
             }
 
             const productResponse = await ApiGet("/admin/visa-experts");
-            setBlogs(productResponse?.blog || []);
+            setExperts(productResponse?.blog || []);
             resetVisaExpertForm();
         } catch (err) {
             console.error("Error submitting blog:", err);
@@ -615,48 +552,6 @@ export default function LandingPage() {
             const cloudImg = await cloudinaryUpload(file); // Upload image to Cloudinary
             console.log("Uploaded blog details image URL:", cloudImg);
             setSelectedBlogDetailsImage(cloudImg);
-        }
-    };
-
-    const handleBlogDetails = (blog) => {
-        setSelectedBlog(blog);
-        setBlogModalOpen(true)
-    }
-
-    const handleModalOpen = (blogId = null, faqId = null, visaId = null, testimonialId = null, imageId = null) => {
-        setBlogIdToDelete(blogId);
-        setFaqIdToDelete(faqId);
-        setExpertIdToDelete(visaId);
-        setTestimonialIdToDelete(testimonialId);
-        setGalleryIdToDelete(imageId)
-        setModalOpen(true);
-    };
-
-
-    console.log('selectedBlog?._id', selectedBlog?._id)
-    const handleBlogDetailsSubmit = async () => {
-        if (!selectedBlog?._id || !blogContent) {
-            alert("All fields are required.");
-            return;
-        }
-
-        const payload = {
-            blogId: selectedBlog?._id,
-            image: selectedBlogDetailsImage || selectedBlog.image,
-            sections: [{ text: blogContent }],
-        };
-        console.log('payload', payload)
-
-        try {
-            const response = await ApiPost("/admin/blog-detail", payload);
-            console.log('response', response)
-            alert(response.message || "Blog Details Added Successfully!");
-            setBlogModalOpen(false);
-            setSelectedBlog("");
-            setContent("");
-        } catch (error) {
-            console.error("Error adding blog details:", error);
-            alert("Failed to add blog details.");
         }
     };
 
@@ -689,22 +584,6 @@ export default function LandingPage() {
         } catch (err) {
             console.error("Error submitting banner:", err);
             setError("Failed to submit banner.");
-        }
-    };
-
-
-    const handleDeleteBlog = async (blogId) => {
-        try {
-            await ApiDelete(`/admin/blog/${blogId}`);
-
-            setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== blogId));
-
-            setModalOpen(false);
-            // const blogsResponse = await ApiGet("/admin/blog");
-            // setBlogs(blogsResponse || []);
-        } catch (err) {
-            console.error("Error deleting blog:", err);
-            setError("Failed to delete blog.");
         }
     };
 
@@ -764,14 +643,6 @@ export default function LandingPage() {
     };
 
 
-    const resetBlogForm = () => {
-        setBlogTitle("");
-        setBlogDescription("");
-        setSelectedBlogImage(null);
-        setSelectedBlog(null);
-    };
-
-
     const resetCalculationForm = () => {
         setCalculationDescription("");
         setCalculationNumber("");
@@ -828,13 +699,6 @@ export default function LandingPage() {
         setSelectedHero(null);
     };
 
-    const handleEditBlog = (blog) => {
-        setBlogTitle(blog.title);
-        setBlogDescription(blog.description);
-        setSelectedBlogImage(blog.image);
-        setSelectedBlog(blog);
-    };
-
     const handleEditGalleryImage = (galleryImage) => {
         setImage(galleryImage.image);
         setSelectedGalleryImage(galleryImage);
@@ -865,9 +729,7 @@ export default function LandingPage() {
     };
 
     const handleDelete = () => {
-        if (blogIdToDelete) {
-            handleDeleteBlog(blogIdToDelete);
-        } else if (faqIdToDelete) {
+        if (faqIdToDelete) {
             handleDeleteFaq(faqIdToDelete);
         } else if (expertIdToDelete) {
             handleDeleteVisaExpert(expertIdToDelete);

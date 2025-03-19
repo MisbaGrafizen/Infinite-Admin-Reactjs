@@ -54,7 +54,7 @@ export default function Login() {
     }
 
     try {
-      const response = await axios.post("https://server.grafizen.in/api/v2/cuckoo/auth/admin/login", formData);
+      const response = await axios.post("http://localhost:4000/api/v1/auth/admin/login", formData);
       console.log("Login API Response:", response);
       const user = response.data?.user;
       console.log('user', user)
