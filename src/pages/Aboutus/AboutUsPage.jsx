@@ -14,7 +14,6 @@ import { ApiDelete, ApiGet, ApiPost, ApiPut } from '../../helper/axios';
 import cloudinaryUpload from '../../helper/cloudinaryUpload';
 
 export default function AboutUsPage() {
-    const [selectedHeroImage, setSelectedHeroImage] = useState(null);
     const [selectedBlogImage, setSelectedBlogImage] = useState(null);
     const [blogs, setBlogs] = useState([]);
     const [blogTitle, setBlogTitle] = useState("");
@@ -783,11 +782,23 @@ export default function AboutUsPage() {
     };
 
 
+    const handleModalOpen = (aboutId = null, firstId = null, secondId = null, thirdId  = null, fourthId = null, coreId = null, galleryId = null, spotlightId = null, blogId = null) => {
+        setAboutIdToDelete(aboutId);
+        setFirstYearIdToDelete(firstId);
+        setSecondYearIdToDelete(secondId);
+        setThirdYearIdToDelete(thirdId);
+        setFourthYearIdToDelete(fourthId);
+        setCoreValueIdToDelete(coreId);
+        setGalleryIdToDelete(galleryId);
+        setSpotlightIdToDelete(spotlightId);
+        setBlogIdToDelete(blogId)
+        setModalOpen(true);
+      };
+    
+
 
     const handleDelete = () => {
-        if (blogIdToDelete) {
-            handleDeleteBlog(blogIdToDelete);
-        } else if (aboutIdToDelete) {
+        if (aboutIdToDelete) {
             handleDeleteAboutUs(aboutIdToDelete);
         } else if (firstYearIdToDelete) {
             handleDeleteFirstYear(firstYearIdToDelete);
@@ -803,11 +814,17 @@ export default function AboutUsPage() {
             handleDeleteGallery(galleryIdToDelete);
         } else if (spotlightIdToDelete) {
             handleDeleteSpotlight(spotlightIdToDelete);
+        } else if (blogIdToDelete) {
+            handleDeleteBlog(blogIdToDelete);
         }
     };
 
     const handleBack = () => {
         navigate(-1);
+    };
+
+    const handleModalclose = () => {
+        setModalOpen(false);
     };
 
     return (
@@ -892,10 +909,12 @@ export default function AboutUsPage() {
                                                 <div className=' w-[100%] flex justify-end'>
                                                     <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                         <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg items-center bg-[#005c95] text-[#fff] justify-center'
+                                                        onClick={() => handleEditAboutUs(aboutUs)}
                                                         >
                                                             <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                         </button>
                                                         <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg items-center bg-[#ff3b31] text-[#fff] justify-center'
+                                                        onClick={() => handleModalOpen(aboutUs._id, null, null, null, null, null, null, null, null)}
                                                         >
                                                             <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                         </button>
@@ -1004,11 +1023,12 @@ export default function AboutUsPage() {
                                                 </div>
                                                 <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                     <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-
+                                                    onClick={() => handleEditFirstYear(item)}
                                                     >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
                                                     <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
+                                                     onClick={() => handleModalOpen( null, item._id, null, null, null, null, null, null, null)}
 
                                                     >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
@@ -1114,12 +1134,12 @@ export default function AboutUsPage() {
                                                 </div>
                                                 <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                     <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-
+                                                    onClick={() => handleEditSecondYear(item)}
                                                     >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
                                                     <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
-
+                                                     onClick={() => handleModalOpen( null, null, item._id, null, null, null, null, null, null)}
                                                     >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                     </button>
@@ -1224,12 +1244,12 @@ export default function AboutUsPage() {
                                                 </div>
                                                 <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                     <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-
+                                                    onClick={() => handleEditThirdYear(item)}
                                                     >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
                                                     <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
-
+                                                     onClick={() => handleModalOpen( null, null, null, item._id, null, null, null, null, null)}
                                                     >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                     </button>
@@ -1329,11 +1349,12 @@ export default function AboutUsPage() {
                                                 </div>
                                                 <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                     <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-
+                                                    onClick={() => handleEditFourthYear(item)}
                                                     >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
                                                     <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
+                                                     onClick={() => handleModalOpen( null, null, null, null, item._id, null, null, null, null)}
 
                                                     >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
@@ -1486,12 +1507,12 @@ export default function AboutUsPage() {
                                                 </div>
                                                 <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                     <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-
+                                                    onClick={() => handleEditCoreValue(item)}
                                                     >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
                                                     <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
-
+                                                     onClick={() => handleModalOpen( null, null, null, null, null, item._id, null, null, null)}
                                                     >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                     </button>
@@ -1559,12 +1580,12 @@ export default function AboutUsPage() {
 
                                                 <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                     <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-
+                                                    onClick={() => handelEditGallery(item)}
                                                     >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
                                                     <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
-
+                                                     onClick={() => handleModalOpen( null, null, null, null, null, null, item._id, null, null)}
                                                     >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                     </button>
@@ -1668,12 +1689,12 @@ export default function AboutUsPage() {
                                                 </div>
                                                 <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                     <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-
+                                                    onClick={() => handleEditSpotlight(item)}
                                                     >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
                                                     <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
-
+                                                     onClick={() => handleModalOpen( null, null, null, null, null, null, null, item._id, null)}
                                                     >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                     </button>
@@ -1770,10 +1791,12 @@ export default function AboutUsPage() {
                                                     <div className=' w-[100%] flex justify-end'>
                                                         <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                             <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg items-center bg-[#005c95] text-[#fff] justify-center'
+                                                            onClick={() => handleEditBlog(item)}
                                                             >
                                                                 <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                             </button>
                                                             <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg items-center bg-[#ff3b31] text-[#fff] justify-center'
+                                                            onClick={() => handleModalOpen( null, null, null, null, null, null, null, null, item._id)}
                                                             >
                                                                 <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                             </button>
@@ -1795,7 +1818,7 @@ export default function AboutUsPage() {
                     </div>
                 </div>
             </div>
-            {/* 
+            
             <NextUIModal isOpen={selectedmodalopen} onOpenChange={handleModalclose}>
                 <ModalContent className="md:max-w-[350px] max-w-[333px] relative  flex justify-center !py-0 mx-auto  h-[300px] shadow-delete ">
                     {(handleModalclose) => (
@@ -1830,7 +1853,7 @@ export default function AboutUsPage() {
                     )}
                 </ModalContent>
             </NextUIModal>
-
+{/* 
             <NextUIModal
                 isOpen={isBlogmodalopen}
 

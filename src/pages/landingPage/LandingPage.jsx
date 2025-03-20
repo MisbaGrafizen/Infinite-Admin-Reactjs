@@ -12,60 +12,26 @@ import {
 } from "@nextui-org/react";
 import { ApiDelete, ApiGet, ApiPost, ApiPut } from '../../helper/axios';
 import cloudinaryUpload from '../../helper/cloudinaryUpload';
-import { addVisaGateway, getVisaGateways } from '../../redux/action/landingManagement';
-import { useDispatch, useSelector } from 'react-redux';
+import {getVisaGateways } from '../../redux/action/landingManagement';
+import { useDispatch } from 'react-redux';
 
 export default function LandingPage() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("OptionA");
-    const [selectedImage, setSelectedImage] = useState(null);
     const [isBlogmodalopen, setBlogModalOpen] = useState(false);
-    const [content, setContent] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [selectedFaq, setSelectedFaq] = useState(null);
-    const [rating, setRating] = useState(0);
     const [cloudImage, setCloudImage] = useState("");
-    const [blogContent, setBlogContent] = useState("");
-    const [question, setQuestion] = useState("");
-    const [answer, setAnswer] = useState("");
     const [selectedmodalopen, setModalOpen] = useState(false);
-    const [faqIdToDelete, setFaqIdToDelete] = useState(null);
-    const [faqs, setFaqs] = useState([]);
-    const [selectedFaqImage, setSelectedFaqImage] = useState(null);
-    const [name, setName] = useState("");
-    const [visaDescription, setVisaDescription] = useState("");
-    const [role, setRole] = useState("");
-    const [selectedVisaImage, setSelectedVisaImage] = useState(null);
-    const [experts, setExperts] = useState([]);
-    const [expertIdToDelete, setExpertIdToDelete] = useState(null);
-    const [selectedVisa, setSelectedVisa] = useState(null);
-    const [testimonialName, setTestimonialName] = useState("");
-    const [testimonialDescription, setTestimonialDescription] = useState("");
-    const [selectedTestimonial, setSelectedTestimonial] = useState(null);
-    const [testimonials, setTestimonials] = useState([]);
-    const [testimonialIdToDelete, setTestimonialIdToDelete] = useState(null);
-    const [selectedTestimonialImage, setSelectedTestimonialImage] = useState(null);
-    const [formData, setFormData] = useState({ name: "", type: "visa-free", image: null });
+    const [heroIdToDelete, setHeroIdToDelete] = useState(null);
     const [gateways, setGateways] = useState([]);
-    const [image, setImage] = useState(null);
-    const [selectedGalleryImage, setSelectedGalleryImage] = useState(null);
     const [gallery, setGallery] = useState([]);
-    const [galleryidToDelete, setGalleryIdToDelete] = useState(null);
     const [selectedBlogDetailsImage, setSelectedBlogDetailsImage] = useState(null);
-    const [selectedImage1, setSelectedImage1] = useState(null);
-    const [selectedImage2, setSelectedImage2] = useState(null);
-    const [themes, setThemes] = useState([]);
-    const [selectedTheme, setSelectedTheme] = useState(null);
-    const [themeName, setThemeName] = useState("");
-    const [themeImage, setThemeImage] = useState(null);
     const [selectedServiceImage, setSelectedServiceImage] = useState(null);
     const [selectedService, setSelectedService] = useState(null);
     const [services, setServices] = useState([]);
-    const [serviceIdToDelete, setServiceIdToDelete] = useState(null);
     const [serviceTitle, setServiceTitle] = useState("");
     const [serviceDescription, setServiceDescription] = useState("");
-    const [themePackages, setThemePackages] = useState("");
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [productName, setProductName] = useState("");
@@ -86,12 +52,13 @@ export default function LandingPage() {
     const [banners, setBanners] = useState([]);
     const [selectedBanner, setSelectedBanner] = useState(null);
     const [ bannerImage, setBannerImage] = useState(null);
-
+    const [visionIdToDelete, setVisionIdToDelete] = useState(null);
+    const [bannerIdToDelete, setBannerIdToDelete] =  useState(null);
+    const [countIdToDelete, setCountIdToDelete] = useState(null);
+    const [productIdToDelete, setProductIdToDelete] = useState(null);
+    const [serviceIdToDelete, setServiceIdToDelete] = useState(null);
 
     const dispatch = useDispatch();
-
-    const visaGateways = useSelector((state) => state.landing.visaGateways);
-
 
     const editor = useRef(null);
     const placeholder = "Start typing...";
@@ -154,54 +121,6 @@ export default function LandingPage() {
         fetchAboutUs();
     }, []);
 
-
-
-    const handleInputChange = (e) => {
-        setFormData({ ...formData, name: e.target.value });
-    };
-
-
-
-    // const handleSubmit = async () => {
-    //     if (!formData.name || !formData.image) {
-    //         alert("Please fill all fields.");
-    //         return;
-    //     }
-    //     const response = await dispatch(addVisaGateway(formData));
-    //     if (response) {
-    //         setFormData({ name: "", type: activeTab === "VisaFree" ? "visa-free" : "visa-arrival", image: null });
-    //         setSelectedImage(null);
-    //     }
-    // };
-
-    const handleSubmit = async () => {
-        if (!formData.name || !formData.image) {
-            alert("Please fill all fields.");
-            return;
-        }
-
-        const formDataToSend = new FormData();
-        formDataToSend.append("name", formData.name);
-        formDataToSend.append("type", activeTab === "VisaFree" ? "visa-free" : "visa-arrival");
-        formDataToSend.append("image", formData.image); // Ensure file is sent correctly
-
-        console.log("Submitting Form Data:", formDataToSend);
-
-        try {
-            const response = await dispatch(addVisaGateway(formDataToSend));
-            console.log('response', response)
-
-            if (response.visaGateway) {
-                alert("Data added successfully");
-                setFormData({ name: "", type: activeTab === "VisaFree" ? "visa-free" : "visa-arrival", image: null });
-                setSelectedImage(null);
-            }
-            window.location.reload();
-        } catch (error) {
-            console.error("Error submitting form:", error);
-        }
-    };
-
     // const handleDelete = async (id) => {
     //     await dispatch(deleteVisaGateway(id));
     // };
@@ -258,18 +177,6 @@ export default function LandingPage() {
         }
     };
 
-    const handleTestimonialImageChange = async (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const cloudImg = await cloudinaryUpload(file);
-            console.log("Uploaded service image URL:", cloudImg);
-            setCloudImage(cloudImg);
-            const imageUrl = URL.createObjectURL(file);
-            setSelectedTestimonialImage(imageUrl);
-        }
-    };
-
-
     const handleHeroImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -290,53 +197,6 @@ export default function LandingPage() {
             const imageUrl = URL.createObjectURL(file);
             setSelectedServiceImage(imageUrl);
         }
-    };
-
-
-
-    const handleExpertImageChange = async (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const cloudImg = await cloudinaryUpload(file);
-            console.log("Uploaded blog image URL:", cloudImg);
-            setCloudImage(cloudImg);
-            const imageUrl = URL.createObjectURL(file);
-            setSelectedVisaImage(imageUrl);
-        }
-    };
-
-    const handleBlogDetailsclose = () => {
-        setBlogModalOpen(false)
-    }
-
-    const handleImageChange = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        try {
-            // Upload image using your custom Cloudinary function
-            const cloudImg = await cloudinaryUpload(file);
-
-            console.log("Uploaded Image URL:", cloudImg);
-
-            // Set form data with the uploaded image and dynamic type
-            setFormData((prev) => ({
-                ...prev,
-                image: cloudImg,
-                type: activeTab === "VisaFree" ? "visa-free" : "visa-arrival",
-            }));
-
-            // Local preview of the image
-            setSelectedImage(URL.createObjectURL(file));
-        } catch (error) {
-            console.error("Image upload failed:", error);
-        }
-    };
-
-
-
-    const handleStarClick = (index) => {
-        setRating(index + 1); // Set rating based on clicked star index
     };
 
 
@@ -492,153 +352,83 @@ export default function LandingPage() {
         }
     };
 
-
-    const handleTestimonialSubmit = async () => {
+    const handleDeleteVision = async (visionId) => {
         try {
+            await ApiDelete(`/admin/section/${visionId}`);
 
-            const payload = {
-                name: testimonialName,
-                description: testimonialDescription,
-                image: cloudImage || selectedTestimonialImage,
-            };
-            console.log('payload', payload)
-
-            if (selectedTestimonial) {
-                await ApiPut(`/admin/testimonial/${selectedTestimonial._id}`, payload);
-            } else {
-
-                await ApiPost("/admin/testimonial", payload);
-            }
-
-            const testimonialResponse = await ApiGet("/admin/testimonials");
-            setTestimonials(testimonialResponse?.testimonial || []);
-            resetTestimonialForm();
-        } catch (err) {
-            console.error("Error submitting blog:", err);
-            setError("Failed to submit blog.");
-        }
-    };
-
-    const handleVisaExpertSubmit = async () => {
-        try {
-
-            const payload = {
-                name: name,
-                description: visaDescription,
-                role: role,
-                image: cloudImage || selectedVisaImage,
-            };
-            console.log('payload', payload)
-
-            if (selectedVisa) {
-                await ApiPut(`/admin/visa-expert/${selectedVisa._id}`, payload);
-            } else {
-                await ApiPost("/admin/visa-expert", payload);
-            }
-
-            const productResponse = await ApiGet("/admin/visa-experts");
-            setExperts(productResponse?.blog || []);
-            resetVisaExpertForm();
-        } catch (err) {
-            console.error("Error submitting blog:", err);
-            setError("Failed to submit blog.");
-        }
-    };
-
-
-    const handleBlogDetailsImageChange = async (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const cloudImg = await cloudinaryUpload(file); // Upload image to Cloudinary
-            console.log("Uploaded blog details image URL:", cloudImg);
-            setSelectedBlogDetailsImage(cloudImg);
-        }
-    };
-
-
-    const handleFaqSubmit = async () => {
-        try {
-
-            const formData = {
-                question: question,
-                answer: answer,
-                image: cloudImage || selectedFaqImage,
-            };
-
-            if (selectedFaq) {
-                await ApiPut(`/admin/faq/${selectedFaq._id}`, formData);
-            } else {
-                if (!question || !answer) {
-                    alert(
-                        "All fields are required. Please fill in all fields before submitting."
-                    );
-                    return;
-                }
-                await ApiPost("/admin/faq", formData);
-            }
-
-            const serviceResponse = await ApiGet("/admin/faqs");
-            setFaqs(serviceResponse || []);
-            resetFaqForm();
-            //   window.location.reload();
-        } catch (err) {
-            console.error("Error submitting banner:", err);
-            setError("Failed to submit banner.");
-        }
-    };
-
-    const handleDeleteGalleryImage = async (imageId) => {
-        try {
-            await ApiDelete(`/admin/image/${imageId}`);
-
-            setGallery((prevGallery) => prevGallery.filter((gallery) => gallery._id !== imageId));
+            setVisions((prevVision) => prevVision.filter((vision) => vision._id !== visionId));
 
             setModalOpen(false);
         } catch (err) {
-            console.error("Error deleting gallery:", err);
-            setError("Failed to delete gallery.");
+            console.error("Error deleting vision:", err);
+            setError("Failed to delete vision.");
         }
     };
 
 
-    const handleDeleteFaq = async (faqId) => {
+    const handleDeleteHeroImage = async (heroId) => {
         try {
-            await ApiDelete(`/admin/faq/${faqId}`);
+            await ApiDelete(`/admin/hero-section/${heroId}`);
 
-            setFaqs((prevFaqs) => prevFaqs.filter((faq) => faq._id !== faqId));
+            setHeroImage((preHero) => preHero.filter((hero) => hero._id !== heroId));
 
             setModalOpen(false);
         } catch (err) {
-            console.error("Error deleting faq:", err);
-            setError("Failed to delete faq.");
+            console.error("Error deleting image:", err);
+            setError("Failed to delete image.");
         }
     };
 
 
-    const handleDeleteVisaExpert = async (visaId) => {
+    const handleDeleteBanner = async (bannerId) => {
         try {
-            await ApiDelete(`/admin/visa-expert/${visaId}`);
+            await ApiDelete(`/admin/banner/${bannerId}`);
 
-            setExperts((prevExpert) => prevExpert.filter((visa) => visa._id !== visaId));
+            setBanners((prevBanner) => prevBanner.filter((banner) => banner._id !== bannerId));
 
             setModalOpen(false);
         } catch (err) {
-            console.error("Error deleting expert:", err);
-            setError("Failed to delete expert.");
+            console.error("Error deleting banner:", err);
+            setError("Failed to delete banner.");
         }
     };
 
-
-    const handleDeleteTestimonial = async (testimonialId) => {
+    const handleDeleteCalculation = async (countId) => {
         try {
-            await ApiDelete(`/admin/testimonial/${testimonialId}`);
+            await ApiDelete(`/admin/calculation/${countId}`);
 
-            setTestimonials((prevTestimonial) => prevTestimonial.filter((testimonial) => testimonial._id !== testimonialId));
+            setCalculations((preCount) => preCount.filter((count) => count._id !== countId));
 
             setModalOpen(false);
         } catch (err) {
-            console.error("Error deleting testimonial:", err);
-            setError("Failed to delete testimonial.");
+            console.error("Error deleting calculation:", err);
+            setError("Failed to delete calculation.");
+        }
+    };
+
+    const handleDeleteProduct = async (productId) => {
+        try {
+            await ApiDelete(`/admin/category/${productId}`);
+
+            setProducts((preProduct) => preProduct.filter((product) => product._id !== productId));
+
+            setModalOpen(false);
+        } catch (err) {
+            console.error("Error deleting product:", err);
+            setError("Failed to delete product.");
+        }
+    };
+
+    const handleDeleteService = async (serviceId) => {
+        try {
+            await ApiDelete(`/admin/service/${serviceId}`);
+
+            setServices((preService) => preService.filter((service) => service._id !== serviceId));
+
+            setModalOpen(false);
+        } catch (err) {
+            console.error("Error deleting service:", err);
+            setError("Failed to delete service.");
         }
     };
 
@@ -671,72 +461,74 @@ export default function LandingPage() {
         setSelectedService(null);
     };
 
-    const resetVisaExpertForm = () => {
-        setName("");
-        setVisaDescription("");
-        setRole("");
-        setSelectedVisaImage(null);
-        setSelectedVisa(null);
-    };
-
-    const resetTestimonialForm = () => {
-        setTestimonialName("");
-        setTestimonialDescription("");
-        setRating("");
-        setSelectedTestimonialImage(null);
-        setSelectedTestimonial(null);
-    };
-
-    const resetFaqForm = () => {
-        setQuestion("");
-        setAnswer("");
-        setSelectedFaqImage("");
-        setSelectedFaq(null);
-    };
-
     const resetHeroSectionForm = () => {
         setSelectedHeroImage("");
         setSelectedHero(null);
     };
 
-    const handleEditGalleryImage = (galleryImage) => {
-        setImage(galleryImage.image);
-        setSelectedGalleryImage(galleryImage);
+    const handleEditHeroSection = (hero) => {
+        setSelectedHeroImage(hero.image);
+        setSelectedHero(hero);
     };
 
 
-    const handleEditFaq = (faq) => {
-        setQuestion(faq.title);
-        setAnswer(faq.description);
-        setSelectedFaqImage(faq.image);
-        setSelectedFaq(faq);
+    const handleEditVision = (vision) => {
+        setVisionDescription(vision.description);
+        setVisionName(vision.title);
+        setSelectedVisionImage(vision.image);
+        setSelectedVision(vision);
     };
 
-    const handleEditVisaExpert = (visa) => {
-        setName(visa.name);
-        setVisaDescription(visa.description);
-        setRole(visa.role);
-        setSelectedVisaImage(visa.image);
-        setSelectedVisa(visa);
-    };
+    const handleEditBannerImage = (bannner) => {
+        setBannerImage(bannner.image);
+        setSelectedBanner(null);
+    }
 
-    const handleEditTestimonial = (testimonial) => {
-        setTestimonialName(testimonial.title);
-        setTestimonialDescription(testimonial.description);
-        setRating(testimonial.rating);
-        setSelectedTestimonialImage(testimonial.image);
-        setSelectedTestimonial(testimonial);
-    };
+    const handleEditCalculation = (count) => {
+        setCalculationDescription(count?.description);
+        setCalculationNumber(count?.number);
+        setSelectedCalculationIcon(count?.icon);
+        setSelectedCalculation(count);
+    }
+
+    const handleEditProduct = (product) => {
+        setProductImage(product?.image);
+        setProductName(product?.name);
+        setSelectedProduct(product);
+    }
+
+    const handleEditService = (service) => {
+        setServiceTitle(service?.title);
+        setServiceDescription(service?.description);
+        setSelectedServiceImage(service?.icon);
+        setSelectedService(service);
+    }
+
+
+  const handleModalOpen = (visionId = null, heroId = null, bannerId = null, countId  = null, productId = null, serviceId = null) => {
+    setVisionIdToDelete(visionId);
+    setHeroIdToDelete(heroId);
+    setBannerIdToDelete(bannerId);
+    setCountIdToDelete(countId);
+    setProductIdToDelete(productId);
+    setServiceIdToDelete(serviceId);
+    setModalOpen(true);
+  };
+
 
     const handleDelete = () => {
-        if (faqIdToDelete) {
-            handleDeleteFaq(faqIdToDelete);
-        } else if (expertIdToDelete) {
-            handleDeleteVisaExpert(expertIdToDelete);
-        } else if (testimonialIdToDelete) {
-            handleDeleteTestimonial(testimonialIdToDelete);
-        } else if (galleryidToDelete) {
-            handleDeleteGalleryImage(galleryidToDelete)
+        if (visionIdToDelete) {
+            handleDeleteVision(visionIdToDelete);
+        } else if (heroIdToDelete) {
+            handleDeleteHeroImage(heroIdToDelete);
+        } else if (bannerIdToDelete) {
+            handleDeleteBanner(bannerIdToDelete);
+        } else if (countIdToDelete) {
+            handleDeleteCalculation(countIdToDelete);
+        } else if (productIdToDelete) {
+            handleDeleteProduct(productIdToDelete);
+        } else if (serviceIdToDelete) {
+            handleDeleteService(serviceIdToDelete);
         }
     };
 
@@ -747,63 +539,6 @@ export default function LandingPage() {
 
 
     console.log('filteredGateways', filteredGateways)
-
-    const handleThemeImageChange = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        try {
-            const uploadedImage = await cloudinaryUpload(file);
-            setThemeImage(uploadedImage);
-        } catch (error) {
-            console.error("Image upload failed:", error);
-        }
-    };
-
-    const handleThemeSubmit = async () => {
-        if (!themeName || !themeImage || !themePackages) {
-            alert("All fields are required.");
-            return;
-        }
-
-        const payload = { name: themeName, image: themeImage, packages: themePackages };
-
-        try {
-            if (selectedTheme) {
-                await ApiPut(`/admin/theme/${selectedTheme._id}`, payload);
-            } else {
-                await ApiPost("/admin/theme", payload);
-            }
-            const themeResponse = await ApiGet("/admin/themes");
-            setThemes(themeResponse);
-            resetThemeForm();
-        } catch (error) {
-            console.error("Error submitting theme:", error);
-        }
-    };
-
-    const handleEditTheme = (theme) => {
-        setThemeName(theme.name);
-        setThemeImage(theme.image);
-        setThemePackages(theme.packages);
-        setSelectedTheme(theme);
-    };
-
-    const handleDeleteTheme = async (themeId) => {
-        try {
-            await ApiDelete(`/admin/theme/${themeId}`);
-            setThemes((prevThemes) => prevThemes.filter((theme) => theme._id !== themeId));
-        } catch (error) {
-            console.error("Error deleting theme:", error);
-        }
-    };
-
-    const resetThemeForm = () => {
-        setThemeName("");
-        setThemeImage(null);
-        setThemePackages("");
-        setSelectedTheme(null);
-    };
-
 
 
     return (
@@ -889,10 +624,14 @@ export default function LandingPage() {
 
 
                                                 <div className=' flex gap-[10px] justify-end w-[100%]'>
-                                                    <button className='  flex  h-[35px]  w-[70%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'>
+                                                    <button className='  flex  h-[35px]  w-[70%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
+                                                    onClick={() => handleEditHeroSection(item)}
+                                                >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
-                                                    <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'>
+                                                    <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
+                                                    onClick={() => handleModalOpen(item._id, null, null, null, null, null)}
+                                                >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                     </button>
                                                 </div>
@@ -983,11 +722,13 @@ export default function LandingPage() {
                                                     </div>
                                                     <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                         <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg items-center bg-[#005c95] text-[#fff] justify-center'
+                                                        onClick={() => handleEditVision(item)}
                                                         >
                                                             <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                         </button>
                                                         <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg items-center bg-[#ff3b31] text-[#fff] justify-center'
-                                                        >
+                                                        onClick={() => handleModalOpen(null, item._id, null, null, null, null)}
+                                                         >
                                                             <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                         </button>
                                                     </div>
@@ -1040,9 +781,9 @@ export default function LandingPage() {
                                                         className="h-[250px] w-[380px] border-[#005c95] border rounded-lg  flex items-center justify-center cursor-pointer"
                                                         onClick={() => document.getElementById("imageInputExpert").click()}
                                                     >
-                                                        {selectedVisaImage ? (
+                                                        {bannerImage ? (
                                                             <img
-                                                                src={selectedVisaImage}
+                                                                src={bannerImage}
                                                                 alt="Selected"
                                                                 className="h-full w-full object-cover rounded-lg"
                                                             />
@@ -1102,11 +843,13 @@ export default function LandingPage() {
                                                 <div className=' w-[100%] justify-end gap-[10px] flex'>
 
                                                     <button className='  flex  h-[40px]  w-[120px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
+                                                    onClick={() => handleEditBannerImage(item)}
                                                     >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
                                                     <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
-                                                    >
+                                                        onClick={() => handleModalOpen(null, null, item._id, null, null, null)}
+                                                        >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                     </button>
                                                 </div>
@@ -1208,10 +951,13 @@ export default function LandingPage() {
 
                                                 <div className=' flex gap-[10px]  w-[100%]'>
                                                     <button className='  flex  h-[40px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
+                                                    onClick={() => handleEditCalculation(item)}
                                                     >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
                                                     <button className='  flex  h-[40px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
+                                                    onClick={() => handleModalOpen(null, null, null, item._id, null, null)}
+
                                                     >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
                                                     </button>
@@ -1302,11 +1048,12 @@ export default function LandingPage() {
 
                                                 <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                     <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-
+                                                    onClick={() => handleEditProduct(item)}
                                                     >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
                                                     <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
+                                                    onClick={() => handleModalOpen(null, null, null, null, item._id, null)}
 
                                                     >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
@@ -1395,11 +1142,12 @@ export default function LandingPage() {
                                                 </div>
                                                 <div className=' flex gap-[10px] justify-end w-[100%]'>
                                                     <button className='  flex  h-[35px]  w-[80%] gap-[10px] text-[14px] rounded-lg      items-center bg-[#005c95] text-[#fff] justify-center'
-
+                                                    onClick={() => handleEditService(service)}
                                                     >
                                                         <i className="fa-regular fa-pen-to-square text-[17px]"></i>
                                                     </button>
                                                     <button className='  flex  h-[35px]  w-[55px] gap-[10px] text-[14px] rounded-lg      items-center bg-[#ff3b31] text-[#fff] justify-center'
+                                                    onClick={() => handleModalOpen(null, null, null, null, null, service._id)}
 
                                                     >
                                                         <i className=" fa-solid fa-trash  text-[17px]"></i>
@@ -1449,65 +1197,6 @@ export default function LandingPage() {
                             </div>
                         </>
                     )}
-                </ModalContent>
-            </NextUIModal>
-
-            <NextUIModal
-                isOpen={isBlogmodalopen}
-
-            >
-                <ModalContent className="md:max-w-[1000px] max-w-[850px] relative flex justify-center !p-[20px] mx-auto h-[680px] shadow-delete">
-                    <div className=" flex justify-center bg-white z-[10] rounded-tr-[10px] cursor-pointer gap-[5px] px-[10px] font-Poppins border-l-[1px]  rounded-bl-[5px] border-b-[1px] border-[#fc3b3b] absolute top-[0px] right-0 items-center py-[5px] text-red-600 text-[17px]" onClick={handleBlogDetailsclose}>
-                        <i className="fa-solid fa-circle-xmark"></i>
-                        Close
-                    </div>
-
-                    <div className="relative w-[100%] p-[10px] h-[100%]">
-                        <div className="flex gap-[20px] flex-col w-[100%]">
-                            <div
-                                className="h-[240px] w-[100%] border-[#005c95] border-[1.8px] justify-center items-center rounded-[8px] flex cursor-pointer"
-                                onClick={() => document.getElementById("blogImageInput").click()}
-                            >
-                                {selectedBlogDetailsImage ? (
-                                    <img
-                                        src=""
-                                        alt="Selected"
-                                        className="h-full w-full object-cover rounded-[8px]"
-                                    />
-                                ) : (
-                                    <img
-                                        src={selectedBlog?.image}
-                                        alt="Selected"
-                                        className="h-full w-full object-cover rounded-[8px]"
-                                    />
-                                )}
-                                <i className="text-3xl text-[#005c95] fa-solid fa-plus"></i>
-                                <input
-                                    id="blogImageInput"
-                                    type="file"
-                                    accept="image/*"
-                                    style={{ display: "none" }}
-                                    onChange={handleBlogDetailsImageChange}
-                                />
-                            </div>
-
-
-                            <JoditEditor
-                                ref={editor}
-                                // value={blogContent}
-                                // config={config}
-                                tabIndex={2} // tabIndex of textarea
-                                onBlur={(newContent) => setBlogContent(newContent)} // preferred to use only this option to update the content for performance reasons
-                            />
-
-                        </div>
-                        <div
-                            className="w-[100%] h-[45px] mt-[30px] text-[20px] rounded-md mx-auto cursor-pointer flex justify-center items-center text-[#fff]  font-Poppins  font-[600]  bg-[#005f94]  active:scale-95 transition-transform duration-150"
-                            onClick={handleBlogDetailsSubmit}
-                        >
-                            <p>Save</p>
-                        </div>
-                    </div>
                 </ModalContent>
             </NextUIModal>
         </>
